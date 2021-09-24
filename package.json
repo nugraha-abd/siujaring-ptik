@@ -1,5 +1,5 @@
 {
-  "name": "siupil-agan",
+  "name": "siujaring-ptik",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -10,9 +10,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "bcrypt": "^5.0.1",
+    "express": "^4.17.1",
+    "generate-password": "^1.6.1",
+    "jsonwebtoken": "^8.5.1",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0"
   },
   "devDependencies": {
+    "dotenv": "^10.0.0",
     "eslint": "^7.32.0",
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-prettier-standard": "^4.0.1",
@@ -21,6 +27,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-promise": "^5.1.0",
+    "nodemon": "^2.0.12",
     "prettier": "2.3.2",
     "prettier-config-standard": "^4.0.0"
   }
