@@ -18,7 +18,7 @@ const issueJWT = (user) => {
 
   const signedToken = jsonwebtoken.sign(payload, PRIV_KEY, {
     expiresIn: expiresIn,
-    algorithm: 'ecdsa',
+    algorithm: 'ES512',
   })
 
   return {
