@@ -1,5 +1,5 @@
 const fs = require('fs')
-const jsonwebtoken = require('jsonwebtoken')
+const jwt = require('jsonwebtoken')
 const path = require('path')
 
 const PRIV_KEY = fs.readFileSync(
@@ -7,16 +7,17 @@ const PRIV_KEY = fs.readFileSync(
   'utf8'
 )
 
+// Sign Token
 const issueJWT = (user) => {
-  const _id = user._id
-  const expiresIn = '1d'
+  const id = user.id_user
+  const expiresIn = '3h'
 
   const payload = {
-    sub: _id,
+    sub: id,
     iat: Date.now(),
   }
 
-  const signedToken = jsonwebtoken.sign(payload, PRIV_KEY, {
+  const signedToken = jwt.sign(payload, PRIV_KEY, {
     expiresIn: expiresIn,
     algorithm: 'ES512',
   })
