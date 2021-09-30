@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize')
 
-const database = new Sequelize('siujaring', 'root', '', {
+const db = new Sequelize('siujaring', 'root', '', {
   host: 'localhost',
   dialect: 'mysql',
 
@@ -10,16 +10,27 @@ const database = new Sequelize('siujaring', 'root', '', {
     acquire: 30000,
     idle: 10000,
   },
+
+  define: {
+    freezeTableName: true,
+    underscored: true,
+    raw: true,
+    plain: true,
+  },
+
+  query: {
+    raw: true,
+    plain: true,
+  },
 })
 
 // DB authentication
-database
-  .authenticate()
+db.authenticate()
   .then(() => {
-    console.log('Connection has been established successfully.')
+    console.log('Berhasil terkoneksi ke database.')
   })
   .catch((err) => {
-    console.error('Unable to connect to the database:', err)
+    console.error('Tidak dapat terhubung ke database:', err)
   })
 
-module.exports = database
+module.exports = db
