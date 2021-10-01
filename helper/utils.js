@@ -14,7 +14,7 @@ const issueJWT = (user) => {
 
   const payload = {
     sub: id,
-    iat: Date.now(),
+    iat: Math.floor(Date.now() / 1000),
   }
 
   const signedToken = jwt.sign(payload, PRIV_KEY, {
