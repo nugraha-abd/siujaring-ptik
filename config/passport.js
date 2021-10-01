@@ -20,8 +20,8 @@ module.exports = (passport) => {
     new JwtStrategy(options, async (jwt_payload, done) => {
       try {
         let user = await User.findOne({ where: { id_user: jwt_payload.sub } })
-        if (user) return done(null, user)
-        return done(null, false)
+        if (!user) return done(null, false)
+        return done(null, user)
       } catch (err) {
         return done(err, false)
       }
