@@ -11,11 +11,13 @@ module.exports = {
         where: { username: req.body.username },
       })
 
+      // Username verification
       if (!findUser)
         res.status(401).json({ success: false, msg: 'Username salah' })
 
       const isValid = await bcrypt.compare(req.body.password, findUser.password)
 
+      // Password verification
       if (isValid) {
         const tokenObject = utils.issueJWT(findUser)
         res.status(200).json({
