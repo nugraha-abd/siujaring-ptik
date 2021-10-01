@@ -16,11 +16,7 @@ const db = new Sequelize('siujaring', 'root', '', {
     underscored: true,
     raw: true,
     plain: true,
-  },
-
-  query: {
-    raw: true,
-    plain: true,
+    timestamps: false,
   },
 })
 
