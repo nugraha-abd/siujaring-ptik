@@ -46,7 +46,15 @@ const User = db.define('tb_user', {
   },
 })
 
-User.hasOne(Mahasiswa)
-User.hasOne(Dosen)
+User.hasOne(Mahasiswa, {
+  as: 'mahasiswa',
+  foreignKey: 'id_user',
+  sourceKey: 'id_user',
+})
+User.hasOne(Dosen, {
+  as: 'dosen',
+  foreignKey: 'id_user',
+  sourceKey: 'id_user',
+})
 
 module.exports = User
