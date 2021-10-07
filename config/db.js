@@ -14,10 +14,10 @@ const db = new Sequelize('siujaring', 'root', '', {
   define: {
     freezeTableName: true,
     underscored: true,
-    raw: true,
-    plain: true,
     timestamps: false,
   },
+
+  raw: true,
 })
 
 // DB authentication
