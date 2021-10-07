@@ -1,10 +1,10 @@
-const MataKuliah = require('../models/mata-kuliah')
+const models = require('../models/index')
 
 module.exports = {
   get: async (req, res) => {
     try {
       if (req.user.role == 'admin') {
-        const data = await MataKuliah.findAll({
+        const data = await models.MataKuliah.findAll({
           attributes: {
             exclude: ['id_matkul'],
           },
@@ -35,7 +35,7 @@ module.exports = {
       if (req.user.role == 'admin') {
         const { kode_matkul, nama_matkul, sks } = req.body
 
-        const data = await MataKuliah.create({
+        const data = await models.MataKuliah.create({
           kode_matkul,
           nama_matkul,
           sks,
@@ -62,13 +62,13 @@ module.exports = {
 
         const id = req.params.idMataKuliah
 
-        await MataKuliah.update({
+        await models.MataKuliah.update({
           kode_matkul,
           nama_matkul,
           sks,
         })
 
-        const data = await MataKuliah.findOne({
+        const data = await models.MataKuliah.findOne({
           attributes: {
             exclude: ['id_user'],
           },

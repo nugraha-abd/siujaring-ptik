@@ -2,28 +2,26 @@ const { Op } = require('sequelize')
 const bcrypt = require('bcrypt')
 const sequelize = require('../config/db')
 
-const User = require('../models/user')
-const Mahasiswa = require('../models/mahasiswa')
-const Dosen = require('../models/dosen')
+const { models } = require('../models/index')
 
 module.exports = {
   get: async (req, res) => {
     try {
       if (req.user.role == 'admin') {
-        const data = await User.findAll({
+        const data = await models.User.findAll({
           attributes: {
             exclude: ['id_user', 'password'],
           },
           include: [
             {
-              model: Mahasiswa,
+              model: models.Mahasiswa,
               as: 'mahasiswa',
               attributes: {
                 exclude: ['id_mhs', 'id_user'],
               },
             },
             {
-              model: Dosen,
+              model: models.Dosen,
               as: 'dosen',
               attributes: {
                 exclude: ['id_dosen', 'id_user'],
@@ -75,7 +73,7 @@ module.exports = {
         const hashedPassword = await bcrypt.hash(req.body.password, 10)
 
         const data = await sequelize.transaction(async (t) => {
-          const user = await User.create(
+          const user = await models.User.create(
             {
               username,
               role: role.toLowerCase(),
@@ -89,7 +87,7 @@ module.exports = {
           // Insert into Mahasiswa model
           let mahasiswa = {}
           if (req.body.role === 'mahasiswa') {
-            mahasiswa = await Mahasiswa.create(
+            mahasiswa = await models.Mahasiswa.create(
               {
                 id_user: user.id_user,
                 nama_mhs,
@@ -104,7 +102,7 @@ module.exports = {
           // Insert into Dosen model
           let dosen = {}
           if (req.body.role === 'dosen') {
-            dosen = await Dosen.create(
+            dosen = await models.Dosen.create(
               {
                 id_user: user.id_user,
                 nama_dosen,
@@ -147,14 +145,14 @@ module.exports = {
         const { keterangan } = req.body
         const id = req.params.idUser
 
-        await User.update(
+        await models.User.update(
           {
             keterangan,
           },
           { where: { id_user: id } }
         )
 
-        const data = await User.findOne({
+        const data = await models.User.findOne({
           attributes: {
             exclude: ['id_user'],
           },
@@ -173,7 +171,8 @@ module.exports = {
 
         const id = req.params.idUser
 
-        const role = req.user.role == 'mahasiswa' ? Mahasiswa : Dosen
+        const role =
+          req.user.role == 'mahasiswa' ? models.Mahasiswa : models.Dosen
 
         await role.update(
           {
