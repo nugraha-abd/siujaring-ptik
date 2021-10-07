@@ -2,12 +2,12 @@ const bcrypt = require('bcrypt')
 
 const utils = require('../helper/utils')
 
-const User = require('../models/user')
+const { models } = require('../models/index')
 
 module.exports = {
   login: async (req, res, next) => {
     try {
-      const findUser = await User.findOne({
+      const findUser = await models.User.findOne({
         where: { username: req.body.username },
       })
 
