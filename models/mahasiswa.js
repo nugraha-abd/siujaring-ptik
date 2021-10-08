@@ -1,35 +1,43 @@
 const Sequelize = require('sequelize')
-const db = require('../config/db')
-const User = require('./user')
 
-const Mahasiswa = db.define('tb_mahasiswa', {
-  id_mhs: {
-    type: Sequelize.INTEGER(4),
-    primaryKey: true,
-    autoIncrement: true,
-    allowNull: false,
-  },
-  id_user: {
-    type: Sequelize.INTEGER(4),
-    references: {
-      model: User,
-      key: id_user,
+module.exports = (db) => {
+  db.define(
+    'Mahasiswa',
+    {
+      id_mhs: {
+        type: Sequelize.INTEGER(4),
+        primaryKey: true,
+        autoIncrement: true,
+        allowNull: false,
+      },
+      id_user: {
+        type: Sequelize.INTEGER(4),
+        allowNull: false,
+      },
+      nama_mhs: {
+        type: Sequelize.STRING(100),
+        allowNull: false,
+      },
+      nim: {
+        type: Sequelize.STRING(15),
+        unique: true,
+        allowNull: false,
+      },
+      no_telpon: {
+        type: Sequelize.STRING(15),
+        allowNull: true,
+      },
+      created_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW,
+      },
+      updated_at: {
+        type: Sequelize.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.NOW,
+      },
     },
-  },
-  nama_mhs: {
-    type: Sequelize.STRING(100),
-  },
-  nim: {
-    type: Sequelize.STRING(15),
-    unique: true,
-  },
-  no_telpon: {
-    type: Sequelize.STRING(15),
-    allowNull: true,
-  },
-  createdAt: Sequelize.DATE,
-  updatedAt: Sequelize.DATE,
-  underscored: true,
-})
-
-module.exports = Mahasiswa
+    { tableName: 'tb_mahasiswa' }
+  )
+}
