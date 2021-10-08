@@ -1,11 +1,10 @@
 const express = require('express')
+const passport = require('passport')
 
-require('dotenv').config()
+// Passport config
+require('./config/passport')(passport)
 
 const app = express()
-
-// Import middleware
-const authenticateToken = require('./middleware/authenticate-token')
 
 // Body Parser Middleware
 app.use(express.json())
@@ -18,10 +17,10 @@ app.get('/', (req, res) => res.send('Node berhasil dibuka pada REST API'))
 const loginRoutes = require('./routes/login')
 app.use('/login', loginRoutes)
 
-// Token authentication middleware for every routes
-//app.use(passport.authenticate())
+// Passport-jwt authentication middleware (executed after successful login)
+app.use(passport.authenticate('jwt', { session: false }))
 
-// Use the routes
+// User routes
 const userRoutes = require('./routes/user')
 app.use('/user', userRoutes)
 
