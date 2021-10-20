@@ -60,7 +60,7 @@ module.exports = {
       if (req.user.role == 'admin') {
         const { kode_matkul, nama_matkul, sks } = req.body
 
-        const id = req.params.idMataKuliah
+        const id = req.params.idMataKuliah // id atau kode?
 
         await models.MataKuliah.update({
           kode_matkul,
