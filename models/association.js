@@ -116,71 +116,71 @@ function association(sequelize) {
   // JenisUjian - PaketSoal [1:1]
   JenisUjian.hasOne(PaketSoal, {
     as: 'jenis_ujian',
-    foreignKey: 'id_matkul',
-    sourceKey: 'id_matkul',
+    foreignKey: 'id_jenis_ujian',
+    sourceKey: 'id_jenis_ujian',
   })
   PaketSoal.belongsTo(JenisUjian, {
-    foreignKey: 'id_matkul',
-    targetKey: 'id_matkul',
+    foreignKey: 'id_jenis_ujian',
+    targetKey: 'id_jenis_ujian',
   })
 
   // KodeSeksi - PaketSoal [1:1]
   KodeSeksi.hasOne(PaketSoal, {
     as: 'kode_seksi',
-    foreignKey: 'id_jenis_ujian',
-    sourceKey: 'id_jenis_ujian',
+    foreignKey: 'id_kosek',
+    sourceKey: 'id_kosek',
   })
   PaketSoal.belongsTo(KodeSeksi, {
-    foreignKey: 'id_jenis_ujian',
-    targetKey: 'id_jenis_ujian',
+    foreignKey: 'id_kosek',
+    targetKey: 'id_kosek',
   })
 
   // Mahasiswa - PaketSoal [N:M]
   Mahasiswa.belongsToMany(PaketSoal, {
-    through: 'RelPaketSoalMahasiswa',
-    sourceKey: 'id_mhs',
-    targetKey: 'id_mhs',
+    through: RelPaketSoalMahasiswa,
+    foreignKey: 'id_mhs',
+    otherKey: 'id_paket',
   })
   PaketSoal.belongsToMany(Mahasiswa, {
-    through: 'RelPaketSoalMahasiswa',
-    sourceKey: 'id_paket',
-    targetKey: 'id_paket',
+    through: RelPaketSoalMahasiswa,
+    foreignKey: 'id_paket',
+    otherKey: 'id_mhs',
   })
 
   // Mahasiswa - KodeSeksi [N:M]
   Mahasiswa.belongsToMany(KodeSeksi, {
-    through: 'RelKodeSeksiMahasiswa',
-    sourceKey: 'id_mhs',
-    targetKey: 'id_mhs',
+    through: RelKodeSeksiMahasiswa,
+    foreignKey: 'id_mhs',
+    otherKey: 'id_kosek',
   })
   KodeSeksi.belongsToMany(Mahasiswa, {
-    through: 'RelKodeSeksiMahasiswa',
-    sourceKey: 'id_kosek',
-    targetKey: 'id_kosek',
+    through: RelKodeSeksiMahasiswa,
+    foreignKey: 'id_kosek',
+    otherKey: 'id_mhs',
   })
 
   // Soal - PaketSoal [N:M]
-  Soal.belongsToMany(PaketSoal, {
-    through: 'RelSoalPaketSoal',
-    sourceKey: 'id_soal',
-    targetKey: 'id_soal',
+  SoalPg.belongsToMany(PaketSoal, {
+    through: RelSoalPaketSoal,
+    foreignKey: 'id_soal',
+    otherKey: 'id_paket',
   })
-  PaketSoal.belongsToMany(Soal, {
-    through: 'RelSoalPaketSoal',
-    sourceKey: 'id_paket',
-    targetKey: 'id_paket',
+  PaketSoal.belongsToMany(SoalPg, {
+    through: RelSoalPaketSoal,
+    foreignKey: 'id_paket',
+    otherKey: 'id_soal',
   })
 
   // KodeSeksi - PaketSoal [N:M]
   KodeSeksi.belongsToMany(PaketSoal, {
-    through: 'RelKodeSeksiPaketSoal',
-    sourceKey: 'id_kosek',
-    targetKey: 'id_kosek',
+    through: RelKodeSeksiPaketSoal,
+    foreignKey: 'id_kosek',
+    otherKey: 'id_paket',
   })
   PaketSoal.belongsToMany(KodeSeksi, {
-    through: 'RelKodeSeksiPaketSoal',
-    sourceKey: 'id_paket',
-    targetKey: 'id_paket',
+    through: RelKodeSeksiPaketSoal,
+    foreignKey: 'id_paket',
+    otherKey: 'id_kosek',
   })
 }
 
