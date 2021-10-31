@@ -62,11 +62,14 @@ module.exports = {
 
         const id = req.params.idMataKuliah // id atau kode?
 
-        await models.MataKuliah.update({
-          kode_matkul,
-          nama_matkul,
-          sks,
-        })
+        await models.MataKuliah.update(
+          {
+            kode_matkul,
+            nama_matkul,
+            sks,
+          },
+          { where: { id_matkul: id } }
+        )
 
         const data = await models.MataKuliah.findOne({
           attributes: {
