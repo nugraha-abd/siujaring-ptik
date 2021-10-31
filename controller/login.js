@@ -9,6 +9,18 @@ module.exports = {
     try {
       const findUser = await models.User.findOne({
         where: { username: req.body.username },
+        include: [
+          {
+            model: models.Mahasiswa,
+            as: 'mahasiswa',
+            required: false,
+          },
+          {
+            model: models.Dosen,
+            as: 'dosen',
+            required: false,
+          },
+        ],
       })
 
       // Username verification
