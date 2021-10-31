@@ -41,19 +41,29 @@ function association(sequelize) {
 
   // Dosen - KodeSeksi [N:1]
   Dosen.hasMany(KodeSeksi, {
-    as: 'kode_seksi',
-    foreignKey: 'id_dosen',
-    sourceKey: 'id_user',
+    foreignKey: 'id_dosen1',
+    sourceKey: 'id_dosen',
   })
   KodeSeksi.belongsTo(Dosen, {
+    as: 'dosen1',
     foreignKey: 'id_dosen1',
     targetKey: 'id_dosen',
   })
+  Dosen.hasMany(KodeSeksi, {
+    foreignKey: 'id_dosen2',
+    sourceKey: 'id_dosen',
+  })
   KodeSeksi.belongsTo(Dosen, {
+    as: 'dosen2',
     foreignKey: 'id_dosen2',
     targetKey: 'id_dosen',
   })
+  Dosen.hasMany(KodeSeksi, {
+    foreignKey: 'id_dosen3',
+    sourceKey: 'id_dosen',
+  })
   KodeSeksi.belongsTo(Dosen, {
+    as: 'dosen3',
     foreignKey: 'id_dosen3',
     targetKey: 'id_dosen',
   })
@@ -65,6 +75,7 @@ function association(sequelize) {
     sourceKey: 'id_matkul',
   })
   KodeSeksi.belongsTo(MataKuliah, {
+    as: 'mata_kuliah',
     foreignKey: 'id_matkul',
     targetKey: 'id_matkul',
   })
@@ -76,6 +87,7 @@ function association(sequelize) {
     sourceKey: 'id_semester',
   })
   KodeSeksi.belongsTo(Semester, {
+    as: 'semester',
     foreignKey: 'id_semester',
     targetKey: 'id_semester',
   })
