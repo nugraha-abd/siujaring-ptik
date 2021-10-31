@@ -26,19 +26,19 @@ app.use('/user', userRoutes)
 
 // Mata Kuliah Routes
 const mataKuliahRoutes = require('./routes/mata-kuliah')
-app.use('/user', mataKuliahRoutes)
+app.use('/mata-kuliah', mataKuliahRoutes)
 
 // Kode Seksi Routes
 const kodeSeksiRoutes = require('./routes/kode-seksi')
-app.use('/user', kodeSeksiRoutes)
+app.use('/kode-seksi', kodeSeksiRoutes)
 
 // Semester Routes
 const semesterRoutes = require('./routes/semester')
-app.use('/user', semesterRoutes)
+app.use('/semester', semesterRoutes)
 
 // Soal Pg Routes
 const soalPgRoutes = require('./routes/soal-pg')
-app.use('/user', soalPgRoutes)
+app.use('/soal-pg', soalPgRoutes)
 
 const PORT = process.env.PORT || 5000
 
