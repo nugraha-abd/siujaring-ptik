@@ -10,7 +10,7 @@ module.exports = (db) => {
         autoIncrement: true,
         allowNull: false,
       },
-      nomor_semester: {
+      semester: {
         type: Sequelize.STRING(5),
         unique: true,
       },
