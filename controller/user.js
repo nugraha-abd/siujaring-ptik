@@ -19,6 +19,7 @@ module.exports = {
               attributes: {
                 exclude: ['id_mhs', 'id_user'],
               },
+              required: false,
             },
             {
               model: models.Dosen,
@@ -26,6 +27,7 @@ module.exports = {
               attributes: {
                 exclude: ['id_dosen', 'id_user'],
               },
+              required: false,
             },
           ],
           where: {
@@ -57,7 +59,6 @@ module.exports = {
     try {
       if (req.user.role == 'admin') {
         const {
-          username,
           role,
           keterangan,
           email,
@@ -75,7 +76,7 @@ module.exports = {
         const data = await sequelize.transaction(async (t) => {
           const user = await models.User.create(
             {
-              username,
+              username: req.body.role == 'mahasiswa' ? nim : nip,
               role: role.toLowerCase(),
               password: hashedPassword,
               keterangan,
@@ -84,10 +85,11 @@ module.exports = {
             { transaction: t }
           )
 
+          let biodata = {}
+
           // Insert into Mahasiswa model
-          let mahasiswa = {}
           if (req.body.role === 'mahasiswa') {
-            mahasiswa = await models.Mahasiswa.create(
+            biodata = await models.Mahasiswa.create(
               {
                 id_user: user.id_user,
                 nama_mhs,
@@ -96,13 +98,12 @@ module.exports = {
               },
               { transaction: t }
             )
-            return { user, mahasiswa }
+            return { user, biodata }
           }
 
           // Insert into Dosen model
-          let dosen = {}
           if (req.body.role === 'dosen') {
-            dosen = await models.Dosen.create(
+            biodata = await models.Dosen.create(
               {
                 id_user: user.id_user,
                 nama_dosen,
@@ -113,7 +114,7 @@ module.exports = {
               },
               { transaction: t }
             )
-            return { user, dosen }
+            return { user, biodata }
           }
         })
 
@@ -160,7 +161,7 @@ module.exports = {
         })
 
         res.status(200).json({
-          message: 'Berhasil mengubah biodata akun',
+          message: 'Berhasil mengubah keterangan akun',
           data: data,
         })
       }
@@ -187,7 +188,7 @@ module.exports = {
         })
 
         res.status(200).json({
-          message: 'Berhasil mengubah data akun',
+          message: 'Berhasil mengubah nomor telpon',
           data: data,
         })
       } else {
