@@ -36,7 +36,6 @@ module.exports = {
           message: 'Berhasil Login',
           success: true,
           accessToken: accessToken.token,
-          expiresIn: tokenObject.expires,
         })
       } else {
         res.status(401).json({ success: false, msg: 'Password Salah' })
