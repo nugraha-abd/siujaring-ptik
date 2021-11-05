@@ -96,6 +96,6 @@ module.exports = (db) => {
         defaultValue: Sequelize.NOW,
       },
     },
-    { tablename: 'tb_soal_pg' }
+    { tableName: 'tb_soal_pg' }
   )
 }
