@@ -22,6 +22,24 @@ module.exports = (passport) => {
       try {
         let user = await models.User.findOne({
           where: { id_user: jwt_payload.sub },
+          include: [
+            {
+              model: models.Mahasiswa,
+              as: 'mahasiswa',
+              required: false,
+              attributes: {
+                exclude: ['created_at', 'updated_at'],
+              },
+            },
+            {
+              model: models.Dosen,
+              as: 'dosen',
+              required: false,
+              attributes: {
+                exclude: ['created_at', 'updated_at'],
+              },
+            },
+          ],
         })
         if (!user) return done(null, false)
         return done(null, user)
