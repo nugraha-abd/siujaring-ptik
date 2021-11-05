@@ -78,6 +78,13 @@ module.exports = {
           where: { id_matkul: id },
         })
 
+        if (!data) {
+          res.status(404).json({
+            success: false,
+            msg: `Mata kuliah dengan id ${id} tidak ditemukan`,
+          })
+        }
+
         res.status(200).json({
           message: 'Berhasil mengubah data mata kuliah',
           data: data,

@@ -141,10 +141,11 @@ module.exports = {
   },
   put: async (req, res) => {
     try {
+      const id = req.params.idUser
+
       // Change keterangan data
       if (req.user.role == 'admin') {
         const { keterangan } = req.body
-        const id = req.params.idUser
 
         await models.User.update(
           {
@@ -170,8 +171,6 @@ module.exports = {
       else if (req.user.role == 'mahasiswa' || req.user.role == 'dosen') {
         const { no_telpon } = req.body
 
-        const id = req.params.idUser
-
         const role =
           req.user.role == 'mahasiswa' ? models.Mahasiswa : models.Dosen
 
@@ -186,6 +185,13 @@ module.exports = {
           attributes: ['no_telpon', 'updated_at'],
           where: { id_user: id },
         })
+
+        if (!data) {
+          res.status(404).json({
+            success: false,
+            msg: `User dengan id ${id} tidak ditemukan`,
+          })
+        }
 
         res.status(200).json({
           message: 'Berhasil mengubah nomor telpon',
