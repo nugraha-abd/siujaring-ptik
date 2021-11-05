@@ -31,11 +31,11 @@ module.exports = {
 
       // Password verification
       if (isValid) {
-        const tokenObject = utils.issueJWT(findUser)
+        const accessToken = utils.generateAccessToken(findUser)
         res.status(200).json({
           message: 'Berhasil Login',
           success: true,
-          token: tokenObject.token,
+          accessToken: accessToken.token,
           expiresIn: tokenObject.expires,
         })
       } else {

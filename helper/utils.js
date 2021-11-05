@@ -8,7 +8,7 @@ const PRIV_KEY = fs.readFileSync(
 )
 
 // Sign Token
-const issueJWT = (user) => {
+const generateAccessToken = (user) => {
   const id = user.id_user
   const expiresIn = '3h'
 
@@ -28,4 +28,4 @@ const issueJWT = (user) => {
   }
 }
 
-module.exports.issueJWT = issueJWT
+module.exports.generateAccessToken = generateAccessToken
