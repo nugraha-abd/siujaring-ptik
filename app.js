@@ -10,6 +10,9 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
+// Public Folder
+app.use(express.static('./public'))
+
 // Index Routes
 app.get('/', (req, res) => res.send('Node berhasil dibuka pada REST API'))
 
@@ -19,6 +22,10 @@ app.use('/login', loginRoutes)
 
 // Passport-jwt authentication middleware (executed after successful login attempt)
 app.use(passport.authenticate('jwt', { session: false }))
+
+// Logout Routes
+const logoutRoutes = require('./routes/logout')
+app.use('/logout', logoutRoutes)
 
 // User Routes
 const userRoutes = require('./routes/user')
