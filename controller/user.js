@@ -161,6 +161,13 @@ module.exports = {
           where: { id_user: id },
         })
 
+        if (!data) {
+          res.status(404).json({
+            success: false,
+            msg: `User dengan id ${id} tidak ditemukan`,
+          })
+        }
+
         res.status(200).json({
           message: 'Berhasil mengubah keterangan akun',
           data: data,
