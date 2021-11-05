@@ -9,6 +9,7 @@ router
   .post(mataKuliahController.post)
 
 router
-  .route('/:idMataKuliah').put(mataKuliahController.put)
+  .route('/:idMataKuliah')
+  .put(mataKuliahController.put)
 
 module.exports = router
