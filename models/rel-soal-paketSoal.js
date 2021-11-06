@@ -4,7 +4,7 @@ module.exports = (db) => {
   db.define(
     'RelSoalPaketSoal',
     {
-      id_kosek: {
+      id_soal: {
         type: Sequelize.INTEGER(5),
         allowNull: false,
       },
