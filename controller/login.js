@@ -20,10 +20,13 @@ module.exports = {
       // Password verification
       if (isValid) {
         const accessToken = utils.generateAccessToken(findUser)
+        const refreshToken = utils.generateRefreshToken(findUser)
+
         res.status(200).json({
           message: 'Berhasil Login',
           success: true,
           accessToken: accessToken.token,
+          refreshToken: refreshToken.token,
         })
       } else {
         res.status(401).json({ success: false, msg: 'Password Salah' })
