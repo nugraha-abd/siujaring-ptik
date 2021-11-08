@@ -16,16 +16,12 @@ app.use(express.static('./public'))
 // Index Routes
 app.get('/', (req, res) => res.send('Node berhasil dibuka pada REST API'))
 
-// Login Routes
-const loginRoutes = require('./routes/login')
-app.use('/login', loginRoutes)
+// Auth Routes
+const authRoutes = require('./routes/auth')
+app.use('/', authRoutes)
 
 // Passport-jwt authentication middleware (executed after successful login attempt)
 app.use(passport.authenticate('jwt', { session: false }))
-
-// Logout Routes
-const logoutRoutes = require('./routes/logout')
-app.use('/logout', logoutRoutes)
 
 // User Routes
 const userRoutes = require('./routes/user')
