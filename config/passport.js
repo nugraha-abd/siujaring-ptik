@@ -1,19 +1,13 @@
 const JwtStrategy = require('passport-jwt').Strategy
 const ExtractJwt = require('passport-jwt').ExtractJwt
-const fs = require('fs')
-const path = require('path')
 
 const { models } = require('../models/index')
 
-const PUB_KEY = fs.readFileSync(
-  path.join(__dirname, '..', 'public.pem'),
-  'utf8'
-)
+require('dotenv').config()
 
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: PUB_KEY,
-  algorithms: ['ES512'],
+  secretOrKey: process.env.ACCESS_TOKEN_SECRET,
 }
 
 module.exports = (passport) => {
