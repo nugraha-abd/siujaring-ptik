@@ -31,7 +31,7 @@ const generateRefreshToken = (user) => {
     iat: Math.floor(Date.now() / 1000),
   }
 
-  const signedToken = jwt.sign(payload, PRIV_KEY)
+  const signedToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET)
 
   return {
     token: 'Bearer ' + signedToken,
