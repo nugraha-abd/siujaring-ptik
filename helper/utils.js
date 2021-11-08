@@ -1,25 +1,19 @@
-const fs = require('fs')
 const jwt = require('jsonwebtoken')
-const path = require('path')
 
-const PRIV_KEY = fs.readFileSync(
-  path.join(__dirname, '..', 'private.pem'),
-  'utf8'
-)
+require('dotenv').config()
 
-// Sign Token
+// Generate Access Token
 const generateAccessToken = (user) => {
   const id = user.id_user
-  const expiresIn = '3h'
+  const expiresIn = '10m'
 
   const payload = {
     sub: id,
     iat: Math.floor(Date.now() / 1000),
   }
 
-  const signedToken = jwt.sign(payload, PRIV_KEY, {
+  const signedToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, {
     expiresIn: expiresIn,
-    algorithm: 'ES512',
   })
 
   return {
@@ -28,4 +22,21 @@ const generateAccessToken = (user) => {
   }
 }
 
+// Generate Refresh Token
+const generateRefreshToken = (user) => {
+  const id = user.id_user
+
+  const payload = {
+    sub: id,
+    iat: Math.floor(Date.now() / 1000),
+  }
+
+  const signedToken = jwt.sign(payload, PRIV_KEY)
+
+  return {
+    token: 'Bearer ' + signedToken,
+  }
+}
+
 module.exports.generateAccessToken = generateAccessToken
+module.exports.generateRefreshToken = generateRefreshToken
