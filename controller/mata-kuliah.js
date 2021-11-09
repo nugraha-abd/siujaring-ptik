@@ -81,7 +81,7 @@ module.exports = {
         if (!data) {
           res.status(404).json({
             success: false,
-            msg: `Mata kuliah dengan id ${id} tidak ditemukan`,
+            message: `Mata kuliah dengan id ${id} tidak ditemukan`,
           })
         }
 
