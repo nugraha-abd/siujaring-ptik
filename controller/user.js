@@ -164,7 +164,7 @@ module.exports = {
         if (!data) {
           res.status(404).json({
             success: false,
-            msg: `User dengan id ${id} tidak ditemukan`,
+            message: `User dengan id ${id} tidak ditemukan`,
           })
         }
 
@@ -196,7 +196,7 @@ module.exports = {
         if (!data) {
           res.status(404).json({
             success: false,
-            msg: `User dengan id ${id} tidak ditemukan`,
+            message: `User dengan id ${id} tidak ditemukan`,
           })
         }
 
