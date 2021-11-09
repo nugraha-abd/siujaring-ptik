@@ -32,7 +32,7 @@ module.exports = (db) => {
         allowNull: false,
       },
       gambar_jawaban_a: {
-        type: Sequelize.BLOB,
+        type: Sequelize.TEXT,
         allowNull: true,
       },
       jawaban_b: {
@@ -40,7 +40,7 @@ module.exports = (db) => {
         allowNull: false,
       },
       gambar_jawaban_b: {
-        type: Sequelize.BLOB,
+        type: Sequelize.TEXT,
         allowNull: true,
       },
       jawaban_c: {
@@ -48,7 +48,7 @@ module.exports = (db) => {
         allowNull: false,
       },
       gambar_jawaban_c: {
-        type: Sequelize.BLOB,
+        type: Sequelize.TEXT,
         allowNull: true,
       },
       jawaban_d: {
@@ -56,7 +56,7 @@ module.exports = (db) => {
         allowNull: false,
       },
       gambar_jawaban_d: {
-        type: Sequelize.BLOB,
+        type: Sequelize.TEXT,
         allowNull: true,
       },
       jawaban_e: {
@@ -64,7 +64,7 @@ module.exports = (db) => {
         allowNull: true,
       },
       gambar_jawaban_e: {
-        type: Sequelize.BLOB,
+        type: Sequelize.TEXT,
         allowNull: true,
       },
       kunci_jawaban: {
