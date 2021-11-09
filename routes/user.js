@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const checkDuplicate = require('../middleware/checkDuplicate')
+const { checkDuplicate } = require('../middleware/checkDuplicate')
 
 const userController = require('../controller/user')
 
