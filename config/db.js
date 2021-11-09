@@ -17,6 +17,8 @@ const db = new Sequelize('siujaring', 'root', '', {
     timestamps: false,
   },
 
+  timezone: '+07:00',
+
   raw: true,
 })
 
