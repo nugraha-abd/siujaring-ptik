@@ -14,31 +14,34 @@ module.exports = {
 
       // Username verification
       if (!findUser)
-        res.status(401).json({ success: false, msg: 'Username salah' })
-
-      const isValid = await bcrypt.compare(req.body.password, findUser.password)
+        return res
+          .status(401)
+          .json({ success: false, message: 'Username salah' })
 
       // Password verification
-      if (isValid) {
-        const accessToken = utils.generateAccessToken(findUser)
-        const refreshToken = utils.generateRefreshToken(findUser)
+      const isValid = await bcrypt.compare(req.body.password, findUser.password)
 
-        await models.User.update(
-          {
-            refresh_token: refreshToken,
-          },
-          { where: { username: req.body.username } }
-        )
+      if (!isValid)
+        return res
+          .status(401)
+          .json({ success: false, message: 'Password Salah' })
 
-        res.status(200).json({
-          message: 'Berhasil Login',
-          success: true,
-          accessToken: accessToken.token,
-          refreshToken: refreshToken.token,
-        })
-      } else {
-        res.status(401).json({ success: false, msg: 'Password Salah' })
-      }
+      const accessToken = utils.generateAccessToken(findUser)
+      const refreshToken = utils.generateRefreshToken(findUser)
+
+      await models.User.update(
+        {
+          refresh_token: refreshToken.token,
+        },
+        { where: { username: req.body.username } }
+      )
+
+      res.status(200).json({
+        message: 'Berhasil Login',
+        success: true,
+        accessToken: accessToken.token,
+        refreshToken: refreshToken.token,
+      })
     } catch (err) {
       next(err)
     }
@@ -48,9 +51,10 @@ module.exports = {
       const refreshToken = req.body.token
 
       if (refreshToken === null) {
-        return res
-          .status(401)
-          .json({ success: false, msg: 'Token tidak ditemukan' })
+        return res.status(401).json({
+          success: false,
+          message: 'Token tidak ditemukan, silakan login',
+        })
       }
 
       const findRefreshToken = await models.User.findOne({
@@ -60,7 +64,7 @@ module.exports = {
       if (!findRefreshToken) {
         return res
           .status(403)
-          .json({ success: false, msg: 'Token tidak valid' })
+          .json({ success: false, message: 'Token tidak valid' })
       }
 
       jwt.verify(
@@ -70,7 +74,7 @@ module.exports = {
           if (err) {
             return res
               .status(403)
-              .json({ success: false, msg: 'Error verifikasi token' })
+              .json({ success: false, message: 'Error verifikasi token' })
           }
 
           const accessToken = utils.generateAccessToken({
