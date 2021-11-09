@@ -33,6 +33,10 @@ module.exports = (db) => {
         unique: true,
         allowNull: false,
       },
+      refresh_token: {
+        type: Sequelize.TEXT,
+        allowNull: true,
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
