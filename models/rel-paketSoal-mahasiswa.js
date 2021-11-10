@@ -12,15 +12,19 @@ module.exports = (db) => {
         type: Sequelize.INTEGER(5),
         allowNull: false,
       },
+      jawaban_mhs: {
+        type: Sequelize.STRING(40),
+        allowNull: true,
+      },
       nilai: {
         type: Sequelize.INTEGER(3),
         allowNull: true,
       },
-      no_urut_soal: {
+      jawaban_benar: {
         type: Sequelize.INTEGER(2),
         allowNull: true,
       },
-      no_urut_soal: {
+      jawaban_salah: {
         type: Sequelize.INTEGER(2),
         allowNull: true,
       },
