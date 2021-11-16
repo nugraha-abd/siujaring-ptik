@@ -3,7 +3,7 @@ const { models } = require('../models/index')
 module.exports = {
   get: async (req, res) => {
     try {
-      if (req.user.role == 'admin')
+      if (req.user.role !== 'admin')
         return res.status(403).json({
           message: 'Anda bukan admin',
         })
@@ -31,10 +31,11 @@ module.exports = {
   },
   post: async (req, res) => {
     try {
-      if (req.user.role == 'admin')
+      if (req.user.role !== 'admin')
         return res.status(403).json({
           message: 'Anda bukan admin',
         })
+
       const { kode_matkul, nama_matkul, sks } = req.body
 
       const data = await models.MataKuliah.create({
@@ -54,10 +55,11 @@ module.exports = {
   },
   put: async (req, res) => {
     try {
-      if (req.user.role == 'admin')
+      if (req.user.role !== 'admin')
         return res.status(403).json({
           message: 'Anda bukan admin',
         })
+
       const { kode_matkul, nama_matkul, sks } = req.body
 
       const id = req.params.idMataKuliah // id atau kode?

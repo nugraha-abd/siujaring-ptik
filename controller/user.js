@@ -7,10 +7,11 @@ const { models } = require('../models/index')
 module.exports = {
   get: async (req, res) => {
     try {
-      if (req.user.role == 'admin')
+      if (req.user.role !== 'admin')
         return res.status(403).json({
           message: 'Anda bukan admin',
         })
+
       const data = await models.User.findAll({
         attributes: {
           exclude: ['id_user', 'password'],
@@ -55,10 +56,11 @@ module.exports = {
   },
   register: async (req, res) => {
     try {
-      if (req.user.role == 'admin')
+      if (req.user.role !== 'admin')
         return res.status(403).json({
           message: 'Anda bukan admin',
         })
+
       const {
         role,
         keterangan,
