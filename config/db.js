@@ -31,4 +31,6 @@ db.authenticate()
     console.error('Tidak dapat terhubung ke database:', err)
   })
 
+db.sync()
+
 module.exports = db
