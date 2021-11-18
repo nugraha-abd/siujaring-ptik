@@ -13,7 +13,7 @@ module.exports = (db) => {
       id_kosek: {
         type: Sequelize.INTEGER(5),
       },
-      role: {
+      jenis: {
         type: Sequelize.ENUM('uts', 'uas', 'kuis'),
         allowNull: false,
       },
