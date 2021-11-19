@@ -7,7 +7,6 @@ const modelDefiners = [
   require('./mahasiswa'),
   require('./mata-kuliah'),
   require('./kode-seksi'),
-  require('./jenis-ujian'),
   require('./semester'),
   require('./soal-pg'),
   require('./paket-soal'),

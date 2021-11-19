@@ -92,17 +92,6 @@ function association(sequelize) {
     targetKey: 'id_semester',
   })
 
-  // JenisUjian - KodeSeksi [N:1] - ask later
-  KodeSeksi.hasMany(JenisUjian, {
-    as: 'jenis_ujian',
-    foreignKey: 'id_kosek',
-    sourceKey: 'id_kosek',
-  })
-  JenisUjian.belongsTo(KodeSeksi, {
-    foreignKey: 'id_kosek',
-    targetKey: 'id_kosek',
-  })
-
   // Dosen - SoalPg [N:1]
   Dosen.hasMany(SoalPg, {
     as: 'soal_pg',
@@ -123,17 +112,6 @@ function association(sequelize) {
   SoalPg.belongsTo(MataKuliah, {
     foreignKey: 'id_matkul',
     targetKey: 'id_matkul',
-  })
-
-  // JenisUjian - PaketSoal [1:1]
-  JenisUjian.hasOne(PaketSoal, {
-    as: 'jenis_ujian',
-    foreignKey: 'id_jenis_ujian',
-    sourceKey: 'id_jenis_ujian',
-  })
-  PaketSoal.belongsTo(JenisUjian, {
-    foreignKey: 'id_jenis_ujian',
-    targetKey: 'id_jenis_ujian',
   })
 
   // KodeSeksi - PaketSoal [1:1]
