@@ -1,10 +1,14 @@
 'use strict'
 
+const bcrypt = require('bcrypt')
+
 // import user model from index model
 const { models } = require('../models/index')
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    const hashedPassword = await bcrypt.hash('mahasiswa', 10)
+
     const dataUserMahasiswa = []
     const dataMahasiswa = []
 
@@ -14,7 +18,7 @@ module.exports = {
 
       dataUserMahasiswa.push({
         username: `1000${pad}`,
-        password: 'mahasiswa',
+        password: hashedPassword,
         role: 'mahasiswa',
         email: `mahasiswa${pad}@mahasiswa.com`,
         created_at: new Date(),
