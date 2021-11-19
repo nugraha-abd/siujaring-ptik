@@ -10,15 +10,16 @@ module.exports = (db) => {
         autoIncrement: true,
         allowNull: false,
       },
-      id_jenis_ujian: {
-        type: Sequelize.INTEGER(3),
-      },
       id_kosek: {
         type: Sequelize.INTEGER(5),
       },
       kode_paket: {
         type: Sequelize.STRING(15),
         unique: true,
+      },
+      jenis_ujian: {
+        type: Sequelize.ENUM('uts', 'uas', 'kuis'),
+        allowNull: false,
       },
       tgl_mulai: {
         type: Sequelize.DATEONLY,
