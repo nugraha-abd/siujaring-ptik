@@ -39,7 +39,6 @@ module.exports = {
             [Op.not]: 'admin',
           },
         },
-        limit: 3,
       })
       if (data.length === 0) {
         return res.status(404).json({ message: 'Data user tidak ditemukan' })
@@ -56,7 +55,8 @@ module.exports = {
   },
   getById: async (req, res) => {
     try {
-      if (req.user.role !== 'mahasiswa' || req.user.role !== 'dosen')
+      console.log(req.user.role)
+      if (req.user.role !== 'mahasiswa' && req.user.role !== 'dosen')
         return res.status(403).json({
           message: 'Anda tidak memiliki akses',
         })
@@ -84,7 +84,7 @@ module.exports = {
           },
         ],
         where: {
-          id_user: req.params.id,
+          id_user: req.params.idUser,
         },
       })
       if (data === null) {
