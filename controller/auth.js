@@ -3,6 +3,8 @@ const jwt = require('jsonwebtoken')
 
 const utils = require('../helper/utils')
 
+require('dotenv').config()
+
 const { models } = require('../models/index')
 
 module.exports = {
@@ -50,6 +52,7 @@ module.exports = {
     try {
       const refreshToken = req.body.token
 
+      console.log(refreshToken)
       if (refreshToken === null) {
         return res.status(401).json({
           success: false,
@@ -67,27 +70,27 @@ module.exports = {
           .json({ success: false, message: 'Token tidak valid' })
       }
 
-      jwt.verify(
-        refreshToken,
-        process.env.REFRESH_TOKEN_SECRET,
-        async (err, user) => {
-          if (err) {
-            return res
-              .status(403)
-              .json({ success: false, message: 'Error verifikasi token' })
-          }
+      const token = req.body.token.split(' ')[1]
 
-          const accessToken = utils.generateAccessToken({
-            username: user.username,
-          })
-
-          res.status(200).json({
-            message: 'Berhasil refresh token',
-            success: true,
-            accessToken: accessToken.token,
-          })
+      jwt.verify(token, process.env.REFRESH_TOKEN_SECRET, async (err, user) => {
+        if (err) {
+          console.log(err)
+          return res
+            .status(403)
+            .json({ success: false, message: 'Error verifikasi token' })
         }
-      )
+
+        const accessToken = utils.generateAccessToken({
+          id_user: req.user.id_user,
+          username: req.user.username,
+        })
+
+        res.status(200).json({
+          message: 'Berhasil refresh token',
+          success: true,
+          accessToken: accessToken.token,
+        })
+      })
     } catch (err) {
       console.error(err.message)
       res.sendStatus(500)
