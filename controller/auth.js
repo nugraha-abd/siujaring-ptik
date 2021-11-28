@@ -88,7 +88,7 @@ module.exports = {
           })
         }
       )
-    } catch {
+    } catch (err) {
       console.error(err.message)
       res.sendStatus(500)
     }
@@ -109,7 +109,7 @@ module.exports = {
         message: 'Berhasil Logout',
         success: true,
       })
-    } catch {
+    } catch (err) {
       console.error(err.message)
       res.sendStatus(500)
     }
