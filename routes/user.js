@@ -9,6 +9,8 @@ router
   .post(userController.register)
 
 router
-  .route('/:idUser').put(userController.put)
+  .route('/:idUser')
+  .get(userController.getById)
+  .put(userController.put)
 
 module.exports = router

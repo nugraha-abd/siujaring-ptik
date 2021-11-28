@@ -54,6 +54,52 @@ module.exports = {
       res.sendStatus(500)
     }
   },
+  getById: async (req, res) => {
+    try {
+      if (req.user.role !== 'mahasiswa' || req.user.role !== 'dosen')
+        return res.status(403).json({
+          message: 'Anda tidak memiliki akses',
+        })
+
+      const data = await models.User.findOne({
+        attributes: {
+          exclude: ['id_user', 'password'],
+        },
+        include: [
+          {
+            model: models.Mahasiswa,
+            as: 'mahasiswa',
+            attributes: {
+              exclude: ['id_mhs', 'id_user'],
+            },
+            required: false,
+          },
+          {
+            model: models.Dosen,
+            as: 'dosen',
+            attributes: {
+              exclude: ['id_dosen', 'id_user'],
+            },
+            required: false,
+          },
+        ],
+        where: {
+          id_user: req.params.id,
+        },
+      })
+      if (data === null) {
+        return res.status(404).json({ message: 'Data user tidak ditemukan' })
+      }
+
+      res.status(200).json({
+        message: 'Data user ditemukan',
+        data: data,
+      })
+    } catch (err) {
+      console.error(err.message)
+      res.sendStatus(500)
+    }
+  },
   register: async (req, res) => {
     try {
       if (req.user.role !== 'admin')
