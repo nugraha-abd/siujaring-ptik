@@ -52,7 +52,6 @@ module.exports = {
     try {
       const refreshToken = req.body.token
 
-      console.log(refreshToken)
       if (refreshToken === null) {
         return res.status(401).json({
           success: false,
