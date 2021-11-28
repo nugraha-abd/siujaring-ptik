@@ -145,13 +145,6 @@ module.exports = {
       if (req.user.role == 'admin') {
         const { keterangan } = req.body
 
-        await models.User.update(
-          {
-            keterangan,
-          },
-          { where: { id_user: id } }
-        )
-
         const data = await models.User.findOne({
           attributes: {
             exclude: ['id_user'],
@@ -166,6 +159,13 @@ module.exports = {
           })
         }
 
+        await models.User.update(
+          {
+            keterangan,
+          },
+          { where: { id_user: id } }
+        )
+
         res.status(200).json({
           message: 'Berhasil mengubah keterangan akun',
           data: data,
@@ -179,13 +179,6 @@ module.exports = {
         const role =
           req.user.role == 'mahasiswa' ? models.Mahasiswa : models.Dosen
 
-        await role.update(
-          {
-            no_telpon,
-          },
-          { where: { id_user: id } }
-        )
-
         const data = await role.findOne({
           attributes: ['no_telpon', 'updated_at'],
           where: { id_user: id },
@@ -197,6 +190,13 @@ module.exports = {
             message: `User dengan id ${id} tidak ditemukan`,
           })
         }
+
+        await role.update(
+          {
+            no_telpon,
+          },
+          { where: { id_user: id } }
+        )
 
         res.status(200).json({
           message: 'Berhasil mengubah nomor telpon',
