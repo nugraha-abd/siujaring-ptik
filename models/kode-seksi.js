@@ -28,7 +28,7 @@ module.exports = (db) => {
         type: Sequelize.INTEGER(3),
       },
       nomor_kosek: {
-        type: Sequelize.STRING(20),
+        type: Sequelize.CHAR(20),
         unique: true,
         allowNull: false,
       },

@@ -68,7 +68,7 @@ module.exports = (db) => {
         allowNull: true,
       },
       kunci_jawaban: {
-        type: Sequelize.STRING(1),
+        type: Sequelize.CHAR(1),
         allowNull: false,
       },
       status: {

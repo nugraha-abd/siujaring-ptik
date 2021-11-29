@@ -19,17 +19,17 @@ module.exports = (db) => {
         allowNull: false,
       },
       nip: {
-        type: Sequelize.STRING(20),
+        type: Sequelize.CHAR(18),
         unique: true,
         allowNull: true,
       },
       nidn: {
-        type: Sequelize.STRING(10),
+        type: Sequelize.CHAR(10),
         unique: true,
         allowNull: true,
       },
       nidk: {
-        type: Sequelize.STRING(10),
+        type: Sequelize.CHAR(10),
         unique: true,
         allowNull: true,
       },

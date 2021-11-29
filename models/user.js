@@ -12,7 +12,7 @@ module.exports = (db) => {
         defaultValue: null, // might remove it later
       },
       username: {
-        type: Sequelize.STRING(15),
+        type: Sequelize.STRING(18),
         unique: true,
         allowNull: false,
       },
@@ -21,7 +21,7 @@ module.exports = (db) => {
         allowNull: false,
       },
       password: {
-        type: Sequelize.STRING(100),
+        type: Sequelize.STRING(60),
         allowNull: false,
       },
       keterangan: {

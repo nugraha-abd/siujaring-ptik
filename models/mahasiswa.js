@@ -19,7 +19,7 @@ module.exports = (db) => {
         allowNull: false,
       },
       nim: {
-        type: Sequelize.STRING(15),
+        type: Sequelize.CHAR(10),
         unique: true,
         allowNull: false,
       },

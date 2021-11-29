@@ -11,7 +11,7 @@ module.exports = (db) => {
         allowNull: false,
       },
       semester: {
-        type: Sequelize.STRING(5),
+        type: Sequelize.STRING(4),
         unique: true,
       },
       created_at: {

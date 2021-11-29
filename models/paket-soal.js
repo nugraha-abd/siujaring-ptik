@@ -14,7 +14,7 @@ module.exports = (db) => {
         type: Sequelize.INTEGER(5),
       },
       kode_paket: {
-        type: Sequelize.STRING(15),
+        type: Sequelize.CHAR(15),
         unique: true,
       },
       jenis_ujian: {

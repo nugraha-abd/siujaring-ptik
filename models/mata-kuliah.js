@@ -11,7 +11,7 @@ module.exports = (db) => {
         allowNull: false,
       },
       kode_matkul: {
-        type: Sequelize.STRING(8),
+        type: Sequelize.CHAR(8),
         unique: true,
       },
       nama_matkul: {
