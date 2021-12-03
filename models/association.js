@@ -99,6 +99,7 @@ function association(sequelize) {
     sourceKey: 'id_dosen',
   })
   SoalPg.belongsTo(Dosen, {
+    as: 'dosen',
     foreignKey: 'id_dosen',
     targetKey: 'id_dosen',
   })
@@ -110,8 +111,21 @@ function association(sequelize) {
     sourceKey: 'id_matkul',
   })
   SoalPg.belongsTo(MataKuliah, {
+    as: 'mata_kuliah',
     foreignKey: 'id_matkul',
     targetKey: 'id_matkul',
+  })
+
+  // Semester - SoalPg [1:1]
+  Semester.hasOne(SoalPg, {
+    as: 'soal_pg',
+    foreignKey: 'id_semester',
+    sourceKey: 'id_semester',
+  })
+  SoalPg.belongsTo(Semester, {
+    as: 'semester',
+    foreignKey: 'id_semester',
+    targetKey: 'id_semester',
   })
 
   // KodeSeksi - PaketSoal [1:1]
