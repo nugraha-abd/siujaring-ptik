@@ -1,3 +1,5 @@
+const { Op } = require('sequelize')
+
 const { models } = require('../models/index')
 
 module.exports = {
@@ -176,7 +178,9 @@ module.exports = {
         seluruhMahasiswa.push(mahasiswa)
       }
 
-      const data = await models.RelKodeSeksiMahasiswa.bulkCreate(seluruhSoal)
+      const data = await models.RelKodeSeksiMahasiswa.bulkCreate(
+        seluruhMahasiswa
+      )
 
       res.status(200).json({
         message: `Berhasil menambahkan mahasiswa ke dalam kode seksi dengan id ${id}`,
