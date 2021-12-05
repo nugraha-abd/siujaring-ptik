@@ -10,9 +10,6 @@ module.exports = (db) => {
         autoIncrement: true,
         allowNull: false,
       },
-      id_kosek: {
-        type: Sequelize.INTEGER(5),
-      },
       kode_paket: {
         type: Sequelize.CHAR(15),
         unique: true,
