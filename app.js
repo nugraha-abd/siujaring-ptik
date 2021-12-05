@@ -43,6 +43,10 @@ app.use('/semester', semesterRoutes)
 const soalPgRoutes = require('./routes/soal-pg')
 app.use('/soal-pg', soalPgRoutes)
 
+// Soal Pg Routes
+const paketSoalRoutes = require('./routes/paket-soal')
+app.use('/soal-pg', paketSoalRoutes)
+
 const PORT = process.env.PORT || 5000
 
 app.listen(PORT, console.log(`Server started on port ${PORT}`))
