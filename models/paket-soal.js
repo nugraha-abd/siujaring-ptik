@@ -13,6 +13,7 @@ module.exports = (db) => {
       kode_paket: {
         type: Sequelize.CHAR(15),
         unique: true,
+        allowNull: false,
       },
       jenis_ujian: {
         type: Sequelize.ENUM('uts', 'uas', 'kuis'),
