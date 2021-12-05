@@ -7,7 +7,6 @@ function association(sequelize) {
     Dosen,
     MataKuliah,
     KodeSeksi,
-    JenisUjian,
     Semester,
     SoalPg,
     PaketSoal,
@@ -130,11 +129,13 @@ function association(sequelize) {
 
   // Mahasiswa - PaketSoal [N:M]
   Mahasiswa.belongsToMany(PaketSoal, {
+    as: 'paket_soal',
     through: RelPaketSoalMahasiswa,
     foreignKey: 'id_mhs',
     otherKey: 'id_paket',
   })
   PaketSoal.belongsToMany(Mahasiswa, {
+    as: 'mahasiswa',
     through: RelPaketSoalMahasiswa,
     foreignKey: 'id_paket',
     otherKey: 'id_mhs',
@@ -142,11 +143,13 @@ function association(sequelize) {
 
   // Mahasiswa - KodeSeksi [N:M]
   Mahasiswa.belongsToMany(KodeSeksi, {
+    as: 'kode_seksi',
     through: RelKodeSeksiMahasiswa,
     foreignKey: 'id_mhs',
     otherKey: 'id_kosek',
   })
   KodeSeksi.belongsToMany(Mahasiswa, {
+    as: 'mahasiswa',
     through: RelKodeSeksiMahasiswa,
     foreignKey: 'id_kosek',
     otherKey: 'id_mhs',
@@ -154,11 +157,13 @@ function association(sequelize) {
 
   // Soal - PaketSoal [N:M]
   SoalPg.belongsToMany(PaketSoal, {
+    as: 'paket_soal',
     through: RelSoalPaketSoal,
     foreignKey: 'id_soal',
     otherKey: 'id_paket',
   })
   PaketSoal.belongsToMany(SoalPg, {
+    as: 'soal_pg',
     through: RelSoalPaketSoal,
     foreignKey: 'id_paket',
     otherKey: 'id_soal',
@@ -166,11 +171,13 @@ function association(sequelize) {
 
   // KodeSeksi - PaketSoal [N:M]
   KodeSeksi.belongsToMany(PaketSoal, {
+    as: 'paket_soal',
     through: RelKodeSeksiPaketSoal,
     foreignKey: 'id_kosek',
     otherKey: 'id_paket',
   })
   PaketSoal.belongsToMany(KodeSeksi, {
+    as: 'kode_seksi',
     through: RelKodeSeksiPaketSoal,
     foreignKey: 'id_paket',
     otherKey: 'id_kosek',
