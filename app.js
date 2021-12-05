@@ -45,7 +45,7 @@ app.use('/soal-pg', soalPgRoutes)
 
 // Soal Pg Routes
 const paketSoalRoutes = require('./routes/paket-soal')
-app.use('/soal-pg', paketSoalRoutes)
+app.use('/paket-soal', paketSoalRoutes)
 
 const PORT = process.env.PORT || 5000
 
