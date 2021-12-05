@@ -237,12 +237,19 @@ module.exports = {
           })
         }
 
-        const data = await role.update(
+        await role.update(
           {
             no_telpon,
           },
           { where: { id_user: id } }
         )
+
+        const data = await role.findOne({
+          attributes: {
+            exclude: ['id_user'],
+          },
+          where: { id_user: id },
+        })
 
         res.status(200).json({
           message: 'Berhasil mengubah nomor telpon',
