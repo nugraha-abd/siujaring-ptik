@@ -128,17 +128,6 @@ function association(sequelize) {
     targetKey: 'id_semester',
   })
 
-  // KodeSeksi - PaketSoal [1:1]
-  KodeSeksi.hasOne(PaketSoal, {
-    as: 'kode_seksi',
-    foreignKey: 'id_kosek',
-    sourceKey: 'id_kosek',
-  })
-  PaketSoal.belongsTo(KodeSeksi, {
-    foreignKey: 'id_kosek',
-    targetKey: 'id_kosek',
-  })
-
   // Mahasiswa - PaketSoal [N:M]
   Mahasiswa.belongsToMany(PaketSoal, {
     through: RelPaketSoalMahasiswa,
