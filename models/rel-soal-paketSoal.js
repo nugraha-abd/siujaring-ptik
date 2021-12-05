@@ -4,11 +4,11 @@ module.exports = (db) => {
   db.define(
     'RelSoalPaketSoal',
     {
-      id_soal: {
+      id_paket: {
         type: Sequelize.INTEGER(5),
         allowNull: false,
       },
-      id_paket: {
+      id_soal: {
         type: Sequelize.INTEGER(5),
         allowNull: false,
       },
