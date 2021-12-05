@@ -225,19 +225,19 @@ module.exports = {
         const role =
           req.user.role == 'mahasiswa' ? models.Mahasiswa : models.Dosen
 
-        const data = await role.findOne({
+        const findData = await role.findOne({
           attributes: ['no_telpon', 'updated_at'],
           where: { id_user: id },
         })
 
-        if (!data) {
+        if (!findData) {
           res.status(404).json({
             success: false,
             message: `User dengan id ${id} tidak ditemukan`,
           })
         }
 
-        await role.update(
+        const data = await role.update(
           {
             no_telpon,
           },
