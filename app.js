@@ -20,7 +20,7 @@ app.get('/', (req, res) => res.send('Node berhasil dibuka pada REST API'))
 const authRoutes = require('./routes/auth')
 app.use('/', authRoutes)
 
-// Passport-jwt authentication middleware (executed after successful login attempt)
+// Passport-jwt authentication middleware (for protecting routes, need to login first)
 app.use(passport.authenticate('jwt', { session: false }))
 
 // User Routes
@@ -43,9 +43,13 @@ app.use('/semester', semesterRoutes)
 const soalPgRoutes = require('./routes/soal-pg')
 app.use('/soal-pg', soalPgRoutes)
 
-// Soal Pg Routes
+// Paket Soal Routes
 const paketSoalRoutes = require('./routes/paket-soal')
 app.use('/paket-soal', paketSoalRoutes)
+
+// Ujian Routes
+const ujianRoutes = require('./routes/ujian')
+app.use('/ujian', ujianRoutes)
 
 const PORT = process.env.PORT || 5000
 
