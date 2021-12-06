@@ -5,7 +5,7 @@ const { models } = require('../models/index')
 module.exports = {
   get: async (req, res) => {
     try {
-      if (req.user.role !== 'admin' && req.user.role !== 'dosen')
+      if (req.user.role == 'admin' || req.user.role == 'dosen')
         return res.status(403).json({
           message: 'Anda tidak memiliki akses',
         })

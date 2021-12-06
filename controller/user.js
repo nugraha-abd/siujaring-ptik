@@ -56,7 +56,7 @@ module.exports = {
   getById: async (req, res) => {
     try {
       console.log(req.user.role)
-      if (req.user.role !== 'mahasiswa' && req.user.role !== 'dosen')
+      if (req.user.role == 'mahasiswa' || req.user.role == 'dosen')
         return res.status(403).json({
           message: 'Anda tidak memiliki akses',
         })
