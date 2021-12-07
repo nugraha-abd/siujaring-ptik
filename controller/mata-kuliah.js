@@ -79,7 +79,9 @@ module.exports = {
       }
 
       res.status(200).json({
-        message: `Data mata kuliah yang sedang diampu oleh dosen dengan id ${req.user.dosen.id_dosen} ditemukan`,
+        message:
+          `Data mata kuliah yang sedang diampu oleh dosen dengan ` +
+          `id ${req.user.dosen.id_dosen} ditemukan`,
         data: data,
       })
     } catch (err) {
