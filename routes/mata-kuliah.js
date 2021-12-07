@@ -12,4 +12,6 @@ router
   .route('/:idMataKuliah')
   .put(mataKuliahController.put)
 
+router.get('/diampu', mataKuliahController.getSdgDiampu)
+
 module.exports = router
