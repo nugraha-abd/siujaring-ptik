@@ -14,10 +14,10 @@ router
   .delete(paketSoalController.delete)
 
 // Menerbitkan paket soal
-router.post('/:idPaket/terbit', paketSoalController.terbit)
+router.put('/:idPaket/terbit', paketSoalController.terbit)
 
 // Mengaktifkan paket soal
-router.post('/:idPaket/aktif', paketSoalController.aktif)
+router.put('/:idPaket/aktif', paketSoalController.aktif)
 
 // Menghubungkan paket soal dengan mahasiswa
 router.post('/generate', paketSoalController.generate)
