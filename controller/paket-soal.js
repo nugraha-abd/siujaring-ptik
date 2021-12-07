@@ -91,7 +91,7 @@ module.exports = {
       //   limit: jml_soal,
       // })
 
-      // generate paket soal
+      // create paket soal
       const paketSoal = await models.PaketSoal.create({
         kode_paket,
         jenis_ujian,
@@ -430,6 +430,7 @@ module.exports = {
 
       res.status(200).json({
         message: `Berhasil menerbitkan paket soal dengan id ${id}`,
+        success: true,
       })
     } catch (err) {
       console.error(err.message)
@@ -479,7 +480,7 @@ module.exports = {
 
       const data = await models.RelPaketSoalMahasiswa.bulkCreate(paketMahasiswa)
 
-      res.status(200).json({
+      res.status(201).json({
         message: `Berhasil menghubungkan paket soal dengan mahasiswa dalam kode seksi dengan id ${id_kosek}`,
         data: data,
       })
@@ -508,7 +509,7 @@ module.exports = {
 
       res.status(200).json({
         message: `Berhasil mengaktifkan soal dengan id ${id}`,
-        data: data,
+        success: true,
       })
     } catch (err) {
       console.error(err.message)
