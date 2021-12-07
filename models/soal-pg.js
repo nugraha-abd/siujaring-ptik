@@ -12,12 +12,15 @@ module.exports = (db) => {
       },
       id_dosen: {
         type: Sequelize.INTEGER(4),
+        allowNull: false,
       },
       id_matkul: {
         type: Sequelize.INTEGER(2),
+        allowNull: false,
       },
       id_semester: {
         type: Sequelize.INTEGER(3),
+        allowNull: false,
       },
       soal: {
         type: Sequelize.TEXT,

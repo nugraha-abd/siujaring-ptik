@@ -12,9 +12,11 @@ module.exports = (db) => {
       },
       id_matkul: {
         type: Sequelize.INTEGER(2),
+        allowNull: false,
       },
       id_dosen1: {
         type: Sequelize.INTEGER(4),
+        allowNull: false,
       },
       id_dosen2: {
         type: Sequelize.INTEGER(4),
