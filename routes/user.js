@@ -10,7 +10,8 @@ router
 
 router
   .route('/:idUser')
-  .get(userController.getById)
   .put(userController.put)
+
+router.get('/profil', userController.getProfil)
 
 module.exports = router

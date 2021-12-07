@@ -53,9 +53,8 @@ module.exports = {
       res.sendStatus(500)
     }
   },
-  getById: async (req, res) => {
+  getProfil: async (req, res) => {
     try {
-      console.log(req.user.role)
       if (req.user.role !== 'mahasiswa' && req.user.role !== 'dosen')
         return res.status(403).json({
           message: 'Anda tidak memiliki akses',
@@ -84,7 +83,7 @@ module.exports = {
           },
         ],
         where: {
-          id_user: req.params.idUser,
+          id_user: req.user.id_user,
         },
       })
       if (data === null) {
