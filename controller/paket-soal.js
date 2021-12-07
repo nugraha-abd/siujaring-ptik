@@ -44,6 +44,12 @@ module.exports = {
         ],
       })
 
+      if (data.length === 0) {
+        return res
+          .status(404)
+          .json({ message: 'Data paket soal tidak ditemukan' })
+      }
+
       res.status(200).json({
         message: 'Data seluruh paket soal ditemukan',
         data: data,
