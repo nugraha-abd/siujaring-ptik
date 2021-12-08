@@ -369,7 +369,7 @@ module.exports = {
           message: 'Anda bukan dosen',
         })
 
-      const id = req.params.idPaket // body atau params?
+      const id = req.params.idPaket // id atau kode?
 
       // get id_soal from RelSoalPaketSoal where id_paket equals to id
       const soal = await models.RelSoalPaketSoal.findAll({
@@ -496,7 +496,7 @@ module.exports = {
           message: 'Anda bukan dosen',
         })
 
-      const id = req.params.idPaket // body atau params?
+      const id = req.params.idPaket // id atau kode?
 
       await models.PaketSoal.update(
         {
