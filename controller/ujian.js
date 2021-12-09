@@ -298,4 +298,91 @@ module.exports = {
       res.sendStatus(500)
     }
   },
+  hitungNilai: async (req, res) => {
+    try {
+      if (req.user.role !== 'mahasiswa')
+        return res.status(403).json({
+          message: 'Anda tidak memiliki akses',
+        })
+
+      const id = req.params.idPaket
+
+      const getJawabanMhs = await models.RelPaketSoalMahasiswa.findOne({
+        attributes: ['jawaban_mhs'],
+        where: { id_paket: id, id_mhs: req.user.mahasiswa.id_mhs },
+      })
+
+      if (getJawabanMhs === null) {
+        return res
+          .status(404)
+          .json({ message: `Data nilai dengan id ${id} tidak ditemukan` })
+      }
+
+      const getSoal = await models.RelSoalPaketSoal.findAll({
+        attributes: ['id_soal'],
+        where: {
+          id_paket: id,
+        },
+      })
+
+      const getKunciJawaban = await models.SoalPg.findAll({
+        attributes: ['id_soal', 'kunci_jawaban', 'jml_menjawab_benar'],
+        where: {
+          id_soal: {
+            [Op.in]: getSoal.map((soal) => soal.id_soal),
+          },
+        },
+      })
+
+      let jawabanBenar = 0
+
+      // creates an algorithm to get jumlah jawaban benar
+      getJawabanMhs.jawaban_mhs.split('').forEach(async (jawaban, i) => {
+        if (
+          jawaban.toUpperCase() ==
+          getKunciJawaban[i].kunci_jawaban.toUpperCase()
+        ) {
+          // update jml_menjawab_benar on soalpg table
+          await models.SoalPg.update(
+            {
+              jml_menjawab_benar: getKunciJawaban[i].jml_menjawab_benar + 1,
+            },
+            {
+              where: {
+                id_soal: getKunciJawaban[i].id_soal,
+              },
+            }
+          )
+
+          jawabanBenar++
+        }
+      })
+
+      const nilai = (jawabanBenar / getKunciJawaban.length) * 100
+
+      await models.RelPaketSoalMahasiswa.update(
+        {
+          nilai: nilai,
+          jawaban_benar: jawabanBenar,
+          jawaban_salah: getKunciJawaban.length - jawabanBenar,
+        },
+        {
+          where: { id_paket: id, id_mhs: req.user.mahasiswa.id_mhs },
+        }
+      )
+
+      const data = await models.RelPaketSoalMahasiswa.findOne({
+        attributes: ['nilai', 'jawaban_benar', 'jawaban_salah'],
+        where: { id_paket: id, id_mhs: req.user.mahasiswa.id_mhs },
+      })
+
+      res.status(200).json({
+        message: `Data nilai dengan id ${id} ditemukan`,
+        data: data,
+      })
+    } catch (err) {
+      console.error(err.message)
+      res.sendStatus(500)
+    }
+  },
 }

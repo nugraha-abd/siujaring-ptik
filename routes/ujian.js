@@ -12,4 +12,7 @@ router
   .get(ujianController.getDetail)
   .put(ujianController.insertJawaban)
 
+// Menghitung nilai ujian setelah ujian diakhiri
+router.get('/:idPaket/nilai', ujianController.hitungNilai)
+
 module.exports = router
