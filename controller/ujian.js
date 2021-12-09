@@ -57,6 +57,19 @@ module.exports = {
                 },
               ],
             },
+            {
+              model: models.Mahasiswa,
+              as: 'mahasiswa',
+              attributes: ['id_mhs'],
+              through: {
+                attributes: ['nilai'],
+                where: {
+                  nilai: {
+                    [Op.ne]: null,
+                  },
+                },
+              },
+            },
           ],
         })
 
@@ -115,6 +128,19 @@ module.exports = {
                 },
               ],
             },
+            {
+              model: models.Mahasiswa,
+              as: 'mahasiswa',
+              attributes: ['id_mhs'],
+              through: {
+                attributes: ['nilai'],
+                where: {
+                  nilai: {
+                    [Op.ne]: null,
+                  },
+                },
+              },
+            },
           ],
         })
 
@@ -172,6 +198,19 @@ module.exports = {
                   attributes: ['nama_matkul'],
                 },
               ],
+            },
+            {
+              model: models.Mahasiswa,
+              as: 'mahasiswa',
+              attributes: ['id_mhs'],
+              through: {
+                attributes: ['nilai'],
+                where: {
+                  nilai: {
+                    [Op.ne]: null,
+                  },
+                },
+              },
             },
           ],
         })
