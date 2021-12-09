@@ -342,6 +342,8 @@ module.exports = {
           jawaban.toUpperCase() ==
           getKunciJawaban[i].kunci_jawaban.toUpperCase()
         ) {
+          jawabanBenar++
+
           // update jml_menjawab_benar on soalpg table
           await models.SoalPg.update(
             {
@@ -353,8 +355,6 @@ module.exports = {
               },
             }
           )
-
-          jawabanBenar++
         }
       })
 
