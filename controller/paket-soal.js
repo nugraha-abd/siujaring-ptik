@@ -395,16 +395,18 @@ module.exports = {
       })
 
       // increase the value of jml_digunakan on each soal by 1
-      await models.SoalPg.update(
-        { jml_digunakan: dataSoal.map((item) => item.jml_digunakan + 1) },
-        {
-          where: {
-            id_soal: {
-              [Op.in]: dataSoal.map((item) => item.id_soal),
-            },
+      for (let i = 0; i < dataSoal.length; i++) {
+        await models.SoalPg.update(
+          {
+            jml_digunakan: dataSoal[i].jml_digunakan + 1,
           },
-        }
-      )
+          {
+            where: {
+              id_soal: dataSoal[i].id_soal,
+            },
+          }
+        )
+      }
 
       // update no_urut for each soal on RelSoalPaketSoal model
       for (let i = 0; i < soal.length; i++) {
