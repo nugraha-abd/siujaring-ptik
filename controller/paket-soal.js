@@ -498,21 +498,29 @@ module.exports = {
           message: 'Anda bukan dosen',
         })
 
+      const { aktif } = req.body
+
       const id = req.params.idPaket // id atau kode?
 
       await models.PaketSoal.update(
         {
-          aktif: true,
+          aktif: aktif,
         },
         {
           where: { id_paket: id },
         }
       )
 
-      res.status(200).json({
-        message: `Berhasil mengaktifkan soal dengan id ${id}`,
-        success: true,
-      })
+      if (aktif)
+        res.status(200).json({
+          message: `Berhasil mengaktifkan paket soal dengan id ${id}`,
+          success: true,
+        })
+      else
+        res.status(200).json({
+          message: `Berhasil menonaktifkan paket soal dengan id ${id}`,
+          success: true,
+        })
     } catch (err) {
       console.error(err.message)
       res.sendStatus(500)
