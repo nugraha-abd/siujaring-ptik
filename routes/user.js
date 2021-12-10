@@ -5,8 +5,10 @@ const userController = require('../controller/user')
 
 router
   .route('/')
-  .get(userController.get)
   .post(userController.register)
+
+router.get('/mahasiswa', userController.getMahasiswa)
+router.get('/dosen', userController.getDosen)
 
 router
   .route('/:idUser')

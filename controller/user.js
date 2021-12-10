@@ -5,7 +5,47 @@ const sequelize = require('../config/db')
 const { models } = require('../models/index')
 
 module.exports = {
-  get: async (req, res) => {
+  getDosen: async (req, res) => {
+    try {
+      if (req.user.role !== 'admin')
+        return res.status(403).json({
+          message: 'Anda bukan admin',
+        })
+
+      const data = await models.User.findAll({
+        attributes: {
+          exclude: ['id_user', 'password'],
+        },
+        include: [
+          {
+            model: models.Dosen,
+            as: 'dosen',
+            attributes: {
+              exclude: ['id_dosen', 'id_user'],
+            },
+            required: true,
+          },
+        ],
+        where: {
+          role: {
+            [Op.not]: 'admin',
+          },
+        },
+      })
+      if (data.length === 0) {
+        return res.status(404).json({ message: 'Data user tidak ditemukan' })
+      }
+
+      res.status(200).json({
+        message: 'Data seluruh user dengan role dosen ditemukan',
+        data: data,
+      })
+    } catch (err) {
+      console.error(err.message)
+      res.sendStatus(500)
+    }
+  },
+  getMahasiswa: async (req, res) => {
     try {
       if (req.user.role !== 'admin')
         return res.status(403).json({
@@ -23,15 +63,7 @@ module.exports = {
             attributes: {
               exclude: ['id_mhs', 'id_user'],
             },
-            required: false,
-          },
-          {
-            model: models.Dosen,
-            as: 'dosen',
-            attributes: {
-              exclude: ['id_dosen', 'id_user'],
-            },
-            required: false,
+            required: true,
           },
         ],
         where: {
@@ -45,7 +77,7 @@ module.exports = {
       }
 
       res.status(200).json({
-        message: 'Data seluruh user ditemukan',
+        message: 'Data seluruh user dengan role mahasiswa ditemukan',
         data: data,
       })
     } catch (err) {
