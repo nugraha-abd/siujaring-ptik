@@ -309,14 +309,13 @@ module.exports = {
           message: 'Anda bukan dosen',
         })
 
+      const { status } = req.body
+
       const id = req.params.idSoal
 
-      await models.SoalPg.update(
-        { status: 'terbit' },
-        { where: { id_soal: id } }
-      )
+      await models.SoalPg.update({ status: status }, { where: { id_soal: id } })
 
-      res.status(204).json({
+      res.status(200).json({
         message: `Berhasil menerbitkan soal dengan id ${id}`,
         success: true,
       })
