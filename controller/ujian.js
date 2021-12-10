@@ -312,6 +312,19 @@ module.exports = {
 
       const { jawaban_mhs } = req.body
 
+      const aktif = await models.PaketSoal.findOne({
+        attributes: ['aktif'],
+        where: {
+          id_paket: req.params.idPaket,
+        },
+      })
+
+      if (aktif.aktif === false) {
+        return res.status(400).json({
+          message: 'Ujian sedang tidak aktif',
+        })
+      }
+
       const id = req.params.idPaket
 
       await models.RelPaketSoalMahasiswa.update(
