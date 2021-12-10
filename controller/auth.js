@@ -95,6 +95,73 @@ module.exports = {
       res.sendStatus(500)
     }
   },
+  ubahPassword: async (req, res) => {
+    try {
+      const { current_password, password_baru, confirm_password } = req.body
+
+      if (password_baru !== confirm_password)
+        return res
+          .status(400)
+          .json({ success: false, message: 'Password tidak sama' })
+
+      const findUser = await models.User.findOne({
+        where: { id_user: req.user.id_user },
+      })
+
+      const isValid = await bcrypt.compare(current_password, findUser.password)
+
+      if (!isValid)
+        return res
+          .status(401)
+          .json({ success: false, message: 'Password lama salah' })
+
+      const hashedPassword = await bcrypt.hash(password_baru, 10)
+
+      await models.User.update(
+        {
+          password: hashedPassword,
+        },
+        { where: { id_user: req.user.id_user } }
+      )
+
+      res.status(200).json({
+        message: 'Berhasil ubah password',
+        success: true,
+      })
+    } catch (err) {
+      console.error(err.message)
+      res.sendStatus(500)
+    }
+  },
+  resetPassword: async (req, res) => {
+    try {
+      if (req.user.role !== 'admin')
+        return res
+          .status(403)
+          .json({ success: false, message: 'Anda tidak memiliki akses' })
+
+      const { password_baru } = req.body
+
+      const id = req.params.idUser
+
+      const hashedPassword = await bcrypt.hash(password_baru, 10)
+
+      await models.User.update(
+        {
+          password: hashedPassword,
+        },
+        { where: { id_user: id } }
+      )
+
+      res.status(200).json({
+        message: 'Berhasil reset password',
+        success: true,
+      })
+    } catch (err) {
+      console.error(err.message)
+      res.sendStatus(500)
+    }
+  },
   logout: async (req, res) => {
     try {
       // remove refresh token value from database on user logout
