@@ -315,10 +315,17 @@ module.exports = {
 
       await models.SoalPg.update({ status: status }, { where: { id_soal: id } })
 
-      res.status(200).json({
-        message: `Berhasil menerbitkan soal dengan id ${id}`,
-        success: true,
-      })
+      if (status === 'terbit')
+        res.status(200).json({
+          message: `Berhasil menerbitkan soal dengan id ${id}`,
+          success: true,
+        })
+
+      if (status === 'draf')
+        res.status(200).json({
+          message: `Berhasil mengubah status soal dengan id ${id} menjadi draf`,
+          success: true,
+        })
     } catch (err) {
       console.error(err.message)
       res.sendStatus(500)
