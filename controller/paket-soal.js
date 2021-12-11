@@ -371,6 +371,23 @@ module.exports = {
 
       const id = req.params.idPaket // id atau kode?
 
+      const cekStatus = await models.PaketSoal.findOne({
+        attributes: ['status_paket', 'jml_soal', 'jml_soal_siap'],
+        where: {
+          id_paket: id,
+        },
+      })
+
+      if (cekStatus.status_paket == 'draf')
+        return res.status(404).json({
+          message: `Paket soal dengan id ${id} belum diterbitkan`,
+        })
+
+      if (cekStatus.jml_soal_siap !== cekStatus.jml_soal)
+        return res.status(400).json({
+          message: `Jumlah soal pada paket soal dengan id ${id} masih kurang`,
+        })
+
       // get id_soal from RelSoalPaketSoal where id_paket equals to id
       const soal = await models.RelSoalPaketSoal.findAll({
         attributes: ['id_paket', 'id_soal', 'no_urut_soal'],
