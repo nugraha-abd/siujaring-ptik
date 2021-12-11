@@ -417,6 +417,7 @@ module.exports = {
           nilai: nilai,
           jawaban_benar: jawabanBenar,
           jawaban_salah: getKunciJawaban.length - jawabanBenar,
+          status_ujian: 'sudah',
         },
         {
           where: { id_paket: id, id_mhs: req.user.mahasiswa.id_mhs },

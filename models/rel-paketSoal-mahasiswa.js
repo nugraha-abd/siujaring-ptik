@@ -28,6 +28,11 @@ module.exports = (db) => {
         type: Sequelize.INTEGER(2),
         allowNull: true,
       },
+      status_ujian: {
+        type: Sequelize.ENUM('belum', 'sudah'),
+        defaultValue: 'belum',
+        allowNull: false,
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
