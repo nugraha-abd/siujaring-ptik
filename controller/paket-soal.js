@@ -378,11 +378,6 @@ module.exports = {
         },
       })
 
-      if (cekStatus.status_paket == 'draf')
-        return res.status(404).json({
-          message: `Paket soal dengan id ${id} belum diterbitkan`,
-        })
-
       if (cekStatus.jml_soal_siap !== cekStatus.jml_soal)
         return res.status(400).json({
           message: `Jumlah soal pada paket soal dengan id ${id} masih kurang`,
@@ -403,12 +398,19 @@ module.exports = {
 
       // get id_soal from soal where id_paket equals to soal.id_paket
       const dataSoal = await models.SoalPg.findAll({
-        attributes: ['id_soal', 'jml_digunakan'],
+        attributes: ['id_soal', 'jml_digunakan', 'status_soal'],
         where: {
           id_soal: {
             [Op.in]: soal.map((item) => item.id_soal),
           },
         },
+      })
+
+      dataSoal.status_soal.forEach((item) => {
+        if (item !== 'draf')
+          return res.status(400).json({
+            message: `Soal dengan id ${item} sudah belum diterbitkan`,
+          })
       })
 
       // increase the value of jml_digunakan on each soal by 1
