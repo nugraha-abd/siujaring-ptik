@@ -85,7 +85,7 @@ module.exports = {
       //   attribute: ['id_soal'],
       //   where: {
       //     id_matkul: req.params.idMatkul,
-      //     status: 'terbit',
+      //     status_paket: 'terbit',
       //   },
       //   order: [models.Sequelize.fn('RANDOM')],
       //   limit: jml_soal,
@@ -102,7 +102,7 @@ module.exports = {
         durasi_paket,
         jml_soal,
         jml_soal_siap: pilihan_tambah_soal.length,
-        status: 'draf',
+        status_paket: 'draf',
         aktif: false,
       })
 
@@ -259,7 +259,7 @@ module.exports = {
             findPaketSoal.jml_soal_siap +
             pilihan_tambah_soal.length -
             pilihan_hapus_soal.length,
-          status: 'draf',
+          status_paket: 'draf',
           aktif: false,
         },
         {
@@ -423,7 +423,7 @@ module.exports = {
 
       await models.PaketSoal.update(
         {
-          status: 'terbit',
+          status_paket: 'terbit',
         },
         {
           where: { id_paket: id },

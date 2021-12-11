@@ -72,7 +72,7 @@ module.exports = {
         jawaban_d,
         jawaban_e,
         kunci_jawaban,
-        status, // draf atau terbit
+        status_soal, // draf atau terbit
       } = req.body
 
       const {
@@ -119,7 +119,7 @@ module.exports = {
         jawaban_e,
         gambar_jawaban_e: pathGambarJawabanE,
         kunci_jawaban,
-        status, // draf atau terbit
+        status_soal, // draf atau terbit
       })
 
       res.status(201).json({
@@ -153,7 +153,7 @@ module.exports = {
         jawaban_d,
         jawaban_e,
         kunci_jawaban,
-        status, // draf atau terbit
+        status_soal, // draf atau terbit
       } = req.body
 
       const {
@@ -205,7 +205,7 @@ module.exports = {
           jawaban_e,
           gambar_jawaban_e: gambar_jawaban_e[0].path,
           kunci_jawaban,
-          status, // draf atau terbit
+          status_soal, // draf atau terbit
         },
         { where: { id_soal: id } }
       )
@@ -309,19 +309,22 @@ module.exports = {
           message: 'Anda bukan dosen',
         })
 
-      const { status } = req.body
+      const { status_soal } = req.body
 
       const id = req.params.idSoal
 
-      await models.SoalPg.update({ status: status }, { where: { id_soal: id } })
+      await models.SoalPg.update(
+        { status_soal: status_soal },
+        { where: { id_soal: id } }
+      )
 
-      if (status === 'terbit')
+      if (status_soal === 'terbit')
         res.status(200).json({
           message: `Berhasil menerbitkan soal dengan id ${id}`,
           success: true,
         })
 
-      if (status === 'draf')
+      if (status_soal === 'draf')
         res.status(200).json({
           message: `Berhasil mengubah status soal dengan id ${id} menjadi draf`,
           success: true,

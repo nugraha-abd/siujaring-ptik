@@ -19,7 +19,7 @@ module.exports = {
 
         const data = await models.PaketSoal.findAll({
           attributes: {
-            exclude: ['id_paket', 'status'],
+            exclude: ['id_paket', 'status_paket'],
           },
           where: {
             id_paket: {
@@ -164,7 +164,7 @@ module.exports = {
 
         const data = await models.PaketSoal.findAll({
           attributes: {
-            exclude: ['id_paket', 'status'],
+            exclude: ['id_paket', 'status_paket'],
           },
           where: {
             id_paket: {
@@ -240,7 +240,7 @@ module.exports = {
 
       const data = await models.PaketSoal.findAll({
         attributes: {
-          exclude: ['id_paket', 'status'],
+          exclude: ['id_paket', 'status_paket'],
         },
         where: {
           id_paket: id,

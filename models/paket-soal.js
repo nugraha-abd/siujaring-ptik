@@ -47,7 +47,7 @@ module.exports = (db) => {
         type: Sequelize.INTEGER(3),
         allowNull: false,
       },
-      status: {
+      status_paket: {
         type: Sequelize.ENUM('draf', 'terbit'),
         allowNull: false,
       },

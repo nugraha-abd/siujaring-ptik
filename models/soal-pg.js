@@ -74,7 +74,7 @@ module.exports = (db) => {
         type: Sequelize.CHAR(1),
         allowNull: false,
       },
-      status: {
+      status_soal: {
         type: Sequelize.ENUM('draf', 'terbit'),
         allowNull: false,
       },
