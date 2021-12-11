@@ -247,6 +247,21 @@ module.exports = {
         },
         include: [
           {
+            model: models.KodeSeksi,
+            as: 'kode_seksi',
+            attributes: ['nomor_kosek'],
+            through: {
+              attributes: [],
+            },
+            include: [
+              {
+                model: models.MataKuliah,
+                as: 'mata_kuliah',
+                attributes: ['nama_matkul'],
+              },
+            ],
+          },
+          {
             model: models.SoalPg,
             as: 'soal_pg',
             attributes: {
@@ -267,21 +282,6 @@ module.exports = {
                 model: models.Dosen,
                 as: 'dosen',
                 attributes: ['nama_dosen'],
-              },
-            ],
-          },
-          {
-            model: models.KodeSeksi,
-            as: 'kode_seksi',
-            attributes: ['nomor_kosek'],
-            through: {
-              attributes: [],
-            },
-            include: [
-              {
-                model: models.MataKuliah,
-                as: 'mata_kuliah',
-                attributes: ['nama_matkul'],
               },
             ],
           },
