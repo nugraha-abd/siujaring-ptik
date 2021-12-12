@@ -1,5 +1,9 @@
+const fs = require('fs')
+const path = require('path')
+
 const { Op } = require('sequelize')
 const bcrypt = require('bcrypt')
+const csv = require('fast-csv')
 const sequelize = require('../config/db')
 
 const { models } = require('../models/index')
@@ -291,6 +295,167 @@ module.exports = {
           message: 'Anda tidak memiliki akses',
         })
       }
+    } catch (err) {
+      console.error(err.message)
+      res.sendStatus(500)
+    }
+  },
+  importDosen: async (req, res) => {
+    try {
+      if (req.user.role !== 'admin')
+        return res.status(403).json({
+          message: 'Anda bukan admin',
+        })
+
+      if (req.file == undefined) {
+        return res.status(400).json({
+          message: 'Mohon unggah file csv',
+          success: false,
+        })
+      }
+
+      let bulkDosen = []
+
+      let dir = path.join(
+        __dirname,
+        '..',
+        'public',
+        'static',
+        'assets',
+        'uploads',
+        'csv',
+        req.file.filename
+      )
+
+      fs.createReadStream(dir)
+        .pipe(csv.parse({ headers: true }))
+        .transform((data, next) => {
+          next(null, {
+            username: data.nip,
+            role: data.role.toLowerCase(),
+            password: bcrypt.hashSync(data.password, 10),
+            keterangan: data.keterangan,
+            email: data.email.toLowerCase(),
+            dosen: {
+              nama_dosen: data.nama_dosen,
+              nip: data.nip,
+              nidk: data.nidk,
+              nidn: data.nidn,
+              no_telpon: data.no_telpon,
+            },
+          })
+        })
+        .on('error', (err) => {
+          throw err
+        })
+        .on('data', (row) => {
+          bulkDosen.push(row)
+        })
+        .on('end', () => {
+          models.User.bulkCreate(bulkDosen, {
+            include: [{ model: models.Dosen, as: 'dosen' }],
+          })
+            .then(() => {
+              fs.unlinkSync(dir)
+
+              res.status(200).json({
+                message:
+                  'Berhasil mengimport data pada file ' + req.file.originalname,
+                success: true,
+              })
+            })
+            .catch((error) => {
+              res.status(400).send({
+                message: 'Terdapat data duplikat pada csv dengan database',
+                error: error.message,
+                success: false,
+              })
+            })
+        })
+    } catch (err) {
+      if (err.message === 'Validation error') {
+        return res.status(400).json({
+          success: false,
+          message: err.errors.map((e) => e.message),
+        })
+      } else {
+        console.error(err.message)
+        res.sendStatus(500)
+      }
+    }
+  },
+  importMahasiswa: async (req, res) => {
+    try {
+      if (req.user.role !== 'admin')
+        return res.status(403).json({
+          message: 'Anda bukan admin',
+        })
+
+      if (req.file == undefined) {
+        return res.status(400).json({
+          message: 'Mohon unggah file csv',
+          success: false,
+        })
+      }
+
+      let bulkMahasiswa = []
+
+      let dir = path.join(
+        __dirname,
+        '..',
+        'public',
+        'static',
+        'assets',
+        'uploads',
+        'csv',
+        req.file.filename
+      )
+
+      fs.createReadStream(dir)
+        .pipe(csv.parse({ headers: true }))
+        .transform((data, next) => {
+          next(null, {
+            username: data.nim,
+            role: data.role.toLowerCase(),
+            password: bcrypt.hashSync(data.password, 10),
+            keterangan: data.keterangan,
+            email: data.email.toLowerCase(),
+            mahasiswa: {
+              nama_mhs: data.nama_mhs,
+              nim: data.nim,
+              no_telpon: data.no_telpon,
+            },
+          })
+        })
+        .on('error', (err) => {
+          throw err
+        })
+        .on('data', (row) => {
+          bulkMahasiswa.push(row)
+        })
+        .on('end', () => {
+          models.User.bulkCreate(bulkMahasiswa, {
+            include: [{ model: models.Mahasiswa, as: 'mahasiswa' }],
+          })
+            .then(() => {
+              fs.unlinkSync(dir)
+
+              res.status(200).json({
+                message:
+                  'Berhasil mengimport data pada file ' + req.file.originalname,
+                success: true,
+              })
+            })
+            .catch((error) => {
+              fs.unlinkSync(dir)
+
+              res.status(400).send({
+                message: 'Terdapat data duplikat pada csv dengan database',
+                error: error.message,
+                success: false,
+              })
+            })
+        })
     } catch (err) {
       console.error(err.message)
       res.sendStatus(500)
