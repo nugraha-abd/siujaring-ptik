@@ -5,7 +5,7 @@ require('dotenv').config()
 // Generate Access Token
 const generateAccessToken = (user) => {
   const id = user.id_user
-  const expiresIn = '10m'
+  const expiresIn = '30m'
 
   const payload = {
     sub: id,
