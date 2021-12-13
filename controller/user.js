@@ -366,6 +366,8 @@ module.exports = {
               })
             })
             .catch((error) => {
+              fs.unlinkSync(dir)
+
               res.status(400).send({
                 message: 'Terdapat data duplikat pada csv dengan database',
                 error: error.message,
