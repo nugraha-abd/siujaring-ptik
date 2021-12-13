@@ -195,7 +195,6 @@ module.exports = {
           bulkMataKuliah.push(row)
         })
         .on('end', () => {
-          console.log(bulkMataKuliah)
           models.MataKuliah.bulkCreate(bulkMataKuliah)
             .then(() => {
               fs.unlinkSync(dir)
