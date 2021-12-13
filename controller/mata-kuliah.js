@@ -189,6 +189,8 @@ module.exports = {
       fs.createReadStream(dir)
         .pipe(csv.parse({ headers: true }))
         .on('error', (err) => {
+          fs.unlinkSync(dir)
+
           throw err
         })
         .on('data', (row) => {

@@ -346,6 +346,8 @@ module.exports = {
           })
         })
         .on('error', (err) => {
+          fs.unlinkSync(dir)
+
           throw err
         })
         .on('data', (row) => {
@@ -424,6 +426,8 @@ module.exports = {
           })
         })
         .on('error', (err) => {
+          fs.unlinkSync(dir)
+
           throw err
         })
         .on('data', (row) => {
