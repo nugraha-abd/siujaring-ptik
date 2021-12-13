@@ -1,4 +1,7 @@
-const { fn, col, Op } = require('sequelize')
+const fs = require('fs')
+const path = require('path')
+const csv = require('fast-csv')
+const { Op } = require('sequelize')
 
 const { models } = require('../models/index')
 
@@ -151,6 +154,69 @@ module.exports = {
         message: 'Berhasil mengubah data mata kuliah',
         data: data,
       })
+    } catch (err) {
+      console.error(err.message)
+      res.sendStatus(500)
+    }
+  },
+  importMataKuliah: async (req, res) => {
+    try {
+      if (req.user.role !== 'admin')
+        return res.status(403).json({
+          message: 'Anda bukan admin',
+        })
+
+      if (req.file == undefined) {
+        return res.status(400).json({
+          message: 'Mohon unggah file csv',
+          success: false,
+        })
+      }
+
+      let bulkMataKuliah = []
+
+      let dir = path.join(
+        __dirname,
+        '..',
+        'public',
+        'static',
+        'assets',
+        'uploads',
+        'csv',
+        req.file.filename
+      )
+
+      fs.createReadStream(dir)
+        .pipe(csv.parse({ headers: true }))
+        .on('error', (err) => {
+          throw err
+        })
+        .on('data', (row) => {
+          bulkMataKuliah.push(row)
+        })
+        .on('end', () => {
+          console.log(bulkMataKuliah)
+          models.MataKuliah.bulkCreate(bulkMataKuliah)
+            .then(() => {
+              fs.unlinkSync(dir)
+
+              res.status(200).json({
+                message:
+                  'Berhasil mengimport data mata kuliah pada file ' +
+                  req.file.originalname,
+                success: true,
+              })
+            })
+            .catch((error) => {
+              fs.unlinkSync(dir)
+
+              res.status(400).send({
+                message: 'Terdapat data duplikat pada csv dengan database',
+                error: error.message,
+                success: false,
+              })
+            })
+        })
     } catch (err) {
       console.error(err.message)
       res.sendStatus(500)
