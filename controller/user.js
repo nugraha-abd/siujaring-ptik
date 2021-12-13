@@ -376,15 +376,8 @@ module.exports = {
             })
         })
     } catch (err) {
-      if (err.message === 'Validation error') {
-        return res.status(400).json({
-          success: false,
-          message: err.errors.map((e) => e.message),
-        })
-      } else {
-        console.error(err.message)
-        res.sendStatus(500)
-      }
+      console.error(err.message)
+      res.sendStatus(500)
     }
   },
   importMahasiswa: async (req, res) => {
