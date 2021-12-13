@@ -360,7 +360,8 @@ module.exports = {
 
               res.status(200).json({
                 message:
-                  'Berhasil mengimport data pada file ' + req.file.originalname,
+                  'Berhasil mengimport data dosen pada file ' +
+                  req.file.originalname,
                 success: true,
               })
             })
@@ -442,7 +443,8 @@ module.exports = {
 
               res.status(200).json({
                 message:
-                  'Berhasil mengimport data pada file ' + req.file.originalname,
+                  'Berhasil mengimport data mahasiswa pada file ' +
+                  req.file.originalname,
                 success: true,
               })
             })
