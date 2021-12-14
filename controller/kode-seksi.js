@@ -1,3 +1,7 @@
+const fs = require('fs')
+const path = require('path')
+const csv = require('fast-csv')
+
 const { Op } = require('sequelize')
 
 const { models } = require('../models/index')
@@ -210,6 +214,119 @@ module.exports = {
       res.status(204).json({
         message: `Berhasil menghapus mahasiswa dari kode seksi dengan id ${id}`,
       })
+    } catch (err) {
+      console.error(err.message)
+      res.sendStatus(500)
+    }
+  },
+  importKodeSeksi: async (req, res) => {
+    try {
+      if (req.user.role !== 'admin')
+        return res.status(403).json({
+          message: 'Anda bukan admin',
+        })
+
+      if (req.file == undefined) {
+        return res.status(400).json({
+          message: 'Mohon unggah file csv',
+          success: false,
+        })
+      }
+
+      let bulkKodeSeksi = []
+      let promise
+
+      let dir = path.join(
+        __dirname,
+        '..',
+        'public',
+        'static',
+        'assets',
+        'uploads',
+        'csv',
+        req.file.filename
+      )
+
+      fs.createReadStream(dir)
+        .pipe(csv.parse({ headers: true }))
+        .on('error', (err) => {
+          fs.unlinkSync(dir)
+
+          throw err
+        })
+        .on('data', (row) => {
+          const idMatkul = models.MataKuliah.findOne({
+            attributes: ['id_matkul'],
+            where: {
+              nama_matkul: row.nama_matkul,
+            },
+          })
+          const idDosen1 = models.Dosen.findOne({
+            attributes: ['id_dosen'],
+            where: {
+              nip: row.nip_dosen1,
+            },
+          })
+          const idDosen2 = models.Dosen.findOne({
+            attributes: ['id_dosen'],
+            where: {
+              nip: row.nip_dosen2,
+            },
+          })
+          const idDosen3 = models.Dosen.findOne({
+            attributes: ['id_dosen'],
+            where: {
+              nip: row.nip_dosen3,
+            },
+          })
+          const idSemester = models.Semester.findOne({
+            attributes: ['id_semester'],
+            where: {
+              semester: row.semester,
+            },
+          })
+          promise = Promise.all([
+            idMatkul,
+            idDosen1,
+            idDosen2,
+            idDosen3,
+            idSemester,
+          ]).then((val) => {
+            const kodeSeksi = {
+              id_matkul: val[0].id_matkul,
+              id_dosen1: val[1].id_dosen,
+              id_dosen2: val[2] ? val[2].id_dosen : null,
+              id_dosen3: val[3] ? val[3].id_dosen : null,
+              id_semester: val[4].id_semester,
+              nomor_kosek: row.nomor_kosek,
+            }
+            bulkKodeSeksi.push(kodeSeksi)
+          })
+        })
+        .on('end', () => {
+          promise.then(() => {
+            models.KodeSeksi.bulkCreate(bulkKodeSeksi)
+              .then(() => {
+                fs.unlinkSync(dir)
+
+                res.status(200).json({
+                  message:
+                    'Berhasil mengimport data kode seksi pada file ' +
+                    req.file.originalname,
+                  success: true,
+                })
+              })
+              .catch((error) => {
+                fs.unlinkSync(dir)
+
+                res.status(400).send({
+                  message: 'Terdapat data duplikat pada csv dengan database',
+                  error: error.message,
+                  success: false,
+                })
+              })
+          })
+        })
     } catch (err) {
       console.error(err.message)
       res.sendStatus(500)
