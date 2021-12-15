@@ -13,7 +13,15 @@ router
 router
   .route('/:idKodeSeksi')
   .put(kodeSeksiController.put)
-  
+
+// Import data mahasiswa ke dalam kode seksi
+router
+.post(
+  '/import/mahasiswa',
+  upload.single("file"),
+  kodeSeksiController.importKodeSeksiMahasiswa
+)
+
 // CRUD mahasiswa dan kode seksi
 router
   .route('/:idKodeSeksi/mahasiswa')
@@ -23,8 +31,8 @@ router
 // Import kode seksi
 router
   .post(
-    '/import', 
-    upload.single("file"), 
+    '/import',
+    upload.single("file"),
     kodeSeksiController.importKodeSeksi
   )
 

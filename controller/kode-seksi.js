@@ -332,4 +332,89 @@ module.exports = {
       res.sendStatus(500)
     }
   },
+  importKodeSeksiMahasiswa: async (req, res) => {
+    try {
+      if (req.user.role !== 'admin')
+        return res.status(403).json({
+          message: 'Anda bukan admin',
+        })
+
+      if (req.file == undefined) {
+        return res.status(400).json({
+          message: 'Mohon unggah file csv',
+          success: false,
+        })
+      }
+
+      let bulkKodeSeksiMahasiswa = []
+      let promise
+
+      let dir = path.join(
+        __dirname,
+        '..',
+        'public',
+        'static',
+        'assets',
+        'uploads',
+        'csv',
+        req.file.filename
+      )
+
+      fs.createReadStream(dir)
+        .pipe(csv.parse({ headers: true }))
+        .on('error', (err) => {
+          fs.unlinkSync(dir)
+
+          throw err
+        })
+        .on('data', (row) => {
+          const idKosek = models.KodeSeksi.findOne({
+            attributes: ['id_kosek'],
+            where: {
+              nomor_kosek: row.nomor_kosek,
+            },
+          })
+          const idMhs = models.Mahasiswa.findOne({
+            attributes: ['id_mhs'],
+            where: {
+              nim: row.nim,
+            },
+          })
+          promise = Promise.all([idKosek, idMhs]).then((val) => {
+            const kodeSeksiMahasiswa = {
+              id_kosek: val[0].id_kosek,
+              id_mhs: val[1].id_mhs,
+            }
+            bulkKodeSeksiMahasiswa.push(kodeSeksiMahasiswa)
+          })
+        })
+        .on('end', () => {
+          promise.then(() => {
+            models.RelKodeSeksiMahasiswa.bulkCreate(bulkKodeSeksiMahasiswa)
+              .then(() => {
+                fs.unlinkSync(dir)
+
+                res.status(200).json({
+                  message:
+                    'Berhasil mengimport data mahasiswa ke dalam kode seksi pada file ' +
+                    req.file.originalname,
+                  success: true,
+                })
+              })
+              .catch((error) => {
+                fs.unlinkSync(dir)
+
+                res.status(400).send({
+                  message: 'Terdapat data duplikat pada csv dengan database',
+                  error: error.message,
+                  success: false,
+                })
+              })
+          })
+        })
+    } catch (err) {
+      console.error(err.message)
+      res.sendStatus(500)
+    }
+  },
 }
