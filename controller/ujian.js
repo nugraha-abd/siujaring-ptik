@@ -5,19 +5,12 @@ const { models } = require('../models/index')
 module.exports = {
   get: async (req, res) => {
     try {
-      if (
-        req.user.role !== 'admin' &&
-        req.user.role !== 'dosen' &&
-        req.user.role !== 'mahasiswa'
-      )
-        return res.status(403).json({ message: 'Anda tidak memiliki akses' })
-
       if (req.user.role === 'admin') {
         const getPaketSoalTerbit = await models.RelPaketSoalMahasiswa.findAll({
           attributes: ['id_paket'],
         })
 
-        const data = await models.PaketSoal.findAll({
+        const getData = await models.PaketSoal.findAll({
           attributes: {
             exclude: ['id_paket', 'status_paket'],
           },
@@ -25,6 +18,675 @@ module.exports = {
             id_paket: {
               [Op.in]: getPaketSoalTerbit.map((paket) => paket.id_paket),
             },
+            aktif: false,
+          },
+          include: [
+            {
+              model: models.SoalPg,
+              as: 'soal_pg',
+              attributes: ['id_soal'],
+              through: {
+                attributes: [],
+              },
+              include: [
+                {
+                  model: models.Dosen,
+                  as: 'dosen',
+                  attributes: ['nama_dosen'],
+                },
+              ],
+            },
+            {
+              model: models.KodeSeksi,
+              as: 'kode_seksi',
+              attributes: ['nomor_kosek'],
+              through: {
+                attributes: [],
+              },
+              include: [
+                {
+                  model: models.MataKuliah,
+                  as: 'mata_kuliah',
+                  attributes: ['nama_matkul'],
+                },
+              ],
+            },
+          ],
+        })
+
+        if (getData.length === 0) {
+          return res.status(404).json({ message: 'Data ujian tidak ditemukan' })
+        }
+
+        const data = getData.map((item) => {
+          const {
+            kode_paket,
+            jenis_ujian,
+            tgl_mulai,
+            waktu_mulai,
+            durasi_soal,
+            durasi_jeda_soal,
+            durasi_paket,
+            jml_soal,
+            jml_soal_siap,
+            aktif,
+            created_at,
+            updated_at,
+            soal_pg: [
+              {
+                dosen: { nama_dosen },
+              },
+            ],
+            kode_seksi: [
+              {
+                nomor_kosek,
+                mata_kuliah: { nama_matkul },
+              },
+            ],
+          } = item.dataValues
+
+          return {
+            kode_paket,
+            jenis_ujian,
+            tgl_mulai,
+            waktu_mulai,
+            durasi_soal,
+            durasi_jeda_soal,
+            durasi_paket,
+            jml_soal,
+            jml_soal_siap,
+            aktif,
+            nama_dosen: nama_dosen,
+            mata_kuliah: nama_matkul,
+            kode_seksi: nomor_kosek,
+            created_at,
+            updated_at,
+          }
+        })
+
+        res.status(200).json({
+          message: 'Data seluruh ujian ditemukan',
+          data: data,
+        })
+      }
+
+      if (req.user.role === 'dosen') {
+        const getPaketSoalTerbit = await models.RelPaketSoalMahasiswa.findAll({
+          attributes: ['id_paket'],
+        })
+
+        const getData = await models.PaketSoal.findAll({
+          attributes: {
+            exclude: ['id_paket'],
+          },
+          where: {
+            id_paket: {
+              [Op.in]: getPaketSoalTerbit.map((paket) => paket.id_paket),
+            },
+            aktif: false,
+          },
+          include: [
+            {
+              model: models.SoalPg,
+              as: 'soal_pg',
+              attributes: ['id_soal'],
+              where: {
+                id_dosen: req.user.dosen.id_dosen,
+              },
+              include: [
+                {
+                  model: models.Dosen,
+                  as: 'dosen',
+                  attributes: ['nama_dosen'],
+                },
+              ],
+            },
+            {
+              model: models.KodeSeksi,
+              as: 'kode_seksi',
+              attributes: ['nomor_kosek'],
+              through: {
+                attributes: [],
+              },
+              include: [
+                {
+                  model: models.MataKuliah,
+                  as: 'mata_kuliah',
+                  attributes: ['nama_matkul'],
+                },
+              ],
+            },
+          ],
+        })
+
+        if (getData.length === 0) {
+          return res.status(404).json({ message: 'Data ujian tidak ditemukan' })
+        }
+
+        const data = getData.map((item) => {
+          const {
+            kode_paket,
+            jenis_ujian,
+            tgl_mulai,
+            waktu_mulai,
+            durasi_soal,
+            durasi_jeda_soal,
+            durasi_paket,
+            jml_soal,
+            jml_soal_siap,
+            aktif,
+            created_at,
+            updated_at,
+            soal_pg: [
+              {
+                dosen: { nama_dosen },
+              },
+            ],
+            kode_seksi: [
+              {
+                nomor_kosek,
+                mata_kuliah: { nama_matkul },
+              },
+            ],
+          } = item.dataValues
+
+          return {
+            kode_paket,
+            jenis_ujian,
+            tgl_mulai,
+            waktu_mulai,
+            durasi_soal,
+            durasi_jeda_soal,
+            durasi_paket,
+            jml_soal,
+            jml_soal_siap,
+            aktif,
+            nama_dosen: nama_dosen,
+            mata_kuliah: nama_matkul,
+            kode_seksi: nomor_kosek,
+            created_at,
+            updated_at,
+          }
+        })
+
+        res.status(200).json({
+          message: 'Data seluruh ujian ditemukan',
+          data: data,
+        })
+      }
+
+      if (req.user.role === 'mahasiswa') {
+        const getPaketSoalTerbit = await models.RelPaketSoalMahasiswa.findAll({
+          attributes: ['id_paket'],
+          where: {
+            id_mhs: req.user.mahasiswa.id_mhs,
+          },
+          aktif: false,
+        })
+
+        const getData = await models.PaketSoal.findAll({
+          attributes: {
+            exclude: ['id_paket', 'status_paket'],
+          },
+          where: {
+            id_paket: {
+              [Op.in]: getPaketSoalTerbit.map((paket) => paket.id_paket),
+            },
+          },
+          include: [
+            {
+              model: models.SoalPg,
+              as: 'soal_pg',
+              attributes: ['id_soal'],
+              include: [
+                {
+                  model: models.Dosen,
+                  as: 'dosen',
+                  attributes: ['nama_dosen'],
+                },
+              ],
+            },
+            {
+              model: models.KodeSeksi,
+              as: 'kode_seksi',
+              attributes: ['nomor_kosek'],
+              through: {
+                attributes: [],
+              },
+              include: [
+                {
+                  model: models.MataKuliah,
+                  as: 'mata_kuliah',
+                  attributes: ['nama_matkul'],
+                },
+              ],
+            },
+            {
+              model: models.Mahasiswa,
+              as: 'mahasiswa',
+              attributes: ['id_mhs'],
+              through: {
+                attributes: ['status_ujian'],
+                where: {
+                  status_ujian: 'belum',
+                },
+              },
+            },
+          ],
+        })
+
+        if (getData.length === 0) {
+          return res.status(404).json({ message: 'Data ujian tidak ditemukan' })
+        }
+
+        const data = getData.map((item) => {
+          const {
+            kode_paket,
+            jenis_ujian,
+            tgl_mulai,
+            waktu_mulai,
+            durasi_soal,
+            durasi_jeda_soal,
+            durasi_paket,
+            jml_soal,
+            jml_soal_siap,
+            aktif,
+            created_at,
+            updated_at,
+            soal_pg: [
+              {
+                dosen: { nama_dosen },
+              },
+            ],
+            kode_seksi: [
+              {
+                nomor_kosek,
+                mata_kuliah: { nama_matkul },
+              },
+            ],
+            mahasiswa: [
+              {
+                RelPaketSoalMahasiswa: { status_ujian },
+              },
+            ],
+          } = item.dataValues
+
+          return {
+            kode_paket,
+            jenis_ujian,
+            tgl_mulai,
+            waktu_mulai,
+            durasi_soal,
+            durasi_jeda_soal,
+            durasi_paket,
+            jml_soal,
+            jml_soal_siap,
+            aktif,
+            nama_dosen: nama_dosen,
+            mata_kuliah: nama_matkul,
+            kode_seksi: nomor_kosek,
+            status_ujian,
+            created_at,
+            updated_at,
+          }
+        })
+
+        res.status(200).json({
+          message: 'Data seluruh ujian ditemukan',
+          data: data,
+        })
+      }
+    } catch (err) {
+      console.error(err.message)
+      res.sendStatus(500)
+    }
+  },
+  getAktif: async (req, res) => {
+    try {
+      if (req.user.role === 'admin') {
+        const getPaketSoalTerbit = await models.RelPaketSoalMahasiswa.findAll({
+          attributes: ['id_paket'],
+        })
+
+        const getData = await models.PaketSoal.findAll({
+          attributes: {
+            exclude: ['id_paket', 'status_paket'],
+          },
+          where: {
+            id_paket: {
+              [Op.in]: getPaketSoalTerbit.map((paket) => paket.id_paket),
+            },
+            aktif: true,
+          },
+          include: [
+            {
+              model: models.SoalPg,
+              as: 'soal_pg',
+              attributes: ['id_soal'],
+              through: {
+                attributes: [],
+              },
+              include: [
+                {
+                  model: models.Dosen,
+                  as: 'dosen',
+                  attributes: ['nama_dosen'],
+                },
+              ],
+            },
+            {
+              model: models.KodeSeksi,
+              as: 'kode_seksi',
+              attributes: ['nomor_kosek'],
+              through: {
+                attributes: [],
+              },
+              include: [
+                {
+                  model: models.MataKuliah,
+                  as: 'mata_kuliah',
+                  attributes: ['nama_matkul'],
+                },
+              ],
+            },
+          ],
+        })
+
+        if (getData.length === 0) {
+          return res.status(404).json({
+            message: 'Data ujian yang sedang berjalan tidak ditemukan',
+          })
+        }
+
+        const data = getData.map((item) => {
+          const {
+            kode_paket,
+            jenis_ujian,
+            tgl_mulai,
+            waktu_mulai,
+            durasi_soal,
+            durasi_jeda_soal,
+            durasi_paket,
+            jml_soal,
+            jml_soal_siap,
+            aktif,
+            created_at,
+            updated_at,
+            soal_pg: [
+              {
+                dosen: { nama_dosen },
+              },
+            ],
+            kode_seksi: [
+              {
+                nomor_kosek,
+                mata_kuliah: { nama_matkul },
+              },
+            ],
+          } = item.dataValues
+
+          return {
+            kode_paket,
+            jenis_ujian,
+            tgl_mulai,
+            waktu_mulai,
+            durasi_soal,
+            durasi_jeda_soal,
+            durasi_paket,
+            jml_soal,
+            jml_soal_siap,
+            aktif,
+            nama_dosen: nama_dosen,
+            mata_kuliah: nama_matkul,
+            kode_seksi: nomor_kosek,
+            created_at,
+            updated_at,
+          }
+        })
+
+        res.status(200).json({
+          message: 'Data seluruh ujian yang sedang berjalan ditemukan',
+          data: data,
+        })
+      }
+
+      if (req.user.role === 'dosen') {
+        const getPaketSoalTerbit = await models.RelPaketSoalMahasiswa.findAll({
+          attributes: ['id_paket'],
+        })
+
+        const getData = await models.PaketSoal.findAll({
+          attributes: {
+            exclude: ['id_paket'],
+          },
+          where: {
+            id_paket: {
+              [Op.in]: getPaketSoalTerbit.map((paket) => paket.id_paket),
+            },
+            aktif: true,
+          },
+          include: [
+            {
+              model: models.SoalPg,
+              as: 'soal_pg',
+              attributes: ['id_soal'],
+              where: {
+                id_dosen: req.user.dosen.id_dosen,
+              },
+              include: [
+                {
+                  model: models.Dosen,
+                  as: 'dosen',
+                  attributes: ['nama_dosen'],
+                },
+              ],
+            },
+            {
+              model: models.KodeSeksi,
+              as: 'kode_seksi',
+              attributes: ['nomor_kosek'],
+              through: {
+                attributes: [],
+              },
+              include: [
+                {
+                  model: models.MataKuliah,
+                  as: 'mata_kuliah',
+                  attributes: ['nama_matkul'],
+                },
+              ],
+            },
+          ],
+        })
+
+        if (getData.length === 0) {
+          return res.status(404).json({
+            message: 'Data ujian yang sedang berjalan tidak ditemukan',
+          })
+        }
+
+        const data = getData.map((item) => {
+          const {
+            kode_paket,
+            jenis_ujian,
+            tgl_mulai,
+            waktu_mulai,
+            durasi_soal,
+            durasi_jeda_soal,
+            durasi_paket,
+            jml_soal,
+            jml_soal_siap,
+            aktif,
+            created_at,
+            updated_at,
+            soal_pg: [
+              {
+                dosen: { nama_dosen },
+              },
+            ],
+            kode_seksi: [
+              {
+                nomor_kosek,
+                mata_kuliah: { nama_matkul },
+              },
+            ],
+          } = item.dataValues
+
+          return {
+            kode_paket,
+            jenis_ujian,
+            tgl_mulai,
+            waktu_mulai,
+            durasi_soal,
+            durasi_jeda_soal,
+            durasi_paket,
+            jml_soal,
+            jml_soal_siap,
+            aktif,
+            nama_dosen: nama_dosen,
+            mata_kuliah: nama_matkul,
+            kode_seksi: nomor_kosek,
+            created_at,
+            updated_at,
+          }
+        })
+
+        res.status(200).json({
+          message: 'Data seluruh ujian yang sedang berjalan ditemukan',
+          data: data,
+        })
+      }
+
+      if (req.user.role === 'mahasiswa') {
+        const getPaketSoalTerbit = await models.RelPaketSoalMahasiswa.findAll({
+          attributes: ['id_paket'],
+          where: {
+            id_mhs: req.user.mahasiswa.id_mhs,
+          },
+        })
+
+        const getData = await models.PaketSoal.findAll({
+          attributes: {
+            exclude: ['id_paket', 'status_paket'],
+          },
+          where: {
+            id_paket: {
+              [Op.in]: getPaketSoalTerbit.map((paket) => paket.id_paket),
+            },
+            aktif: true,
+          },
+          include: [
+            {
+              model: models.SoalPg,
+              as: 'soal_pg',
+              attributes: ['id_soal'],
+              include: [
+                {
+                  model: models.Dosen,
+                  as: 'dosen',
+                  attributes: ['nama_dosen'],
+                },
+              ],
+            },
+            {
+              model: models.KodeSeksi,
+              as: 'kode_seksi',
+              attributes: ['nomor_kosek'],
+              through: {
+                attributes: [],
+              },
+              include: [
+                {
+                  model: models.MataKuliah,
+                  as: 'mata_kuliah',
+                  attributes: ['nama_matkul'],
+                },
+              ],
+            },
+          ],
+        })
+
+        if (getData.length === 0) {
+          return res.status(404).json({
+            message: 'Data ujian yang sedang berjalan tidak ditemukan',
+          })
+        }
+
+        const data = getData.map((item) => {
+          const {
+            kode_paket,
+            jenis_ujian,
+            tgl_mulai,
+            waktu_mulai,
+            durasi_soal,
+            durasi_jeda_soal,
+            durasi_paket,
+            jml_soal,
+            jml_soal_siap,
+            aktif,
+            created_at,
+            updated_at,
+            soal_pg: [
+              {
+                dosen: { nama_dosen },
+              },
+            ],
+            kode_seksi: [
+              {
+                nomor_kosek,
+                mata_kuliah: { nama_matkul },
+              },
+            ],
+          } = item.dataValues
+
+          return {
+            kode_paket,
+            jenis_ujian,
+            tgl_mulai,
+            waktu_mulai,
+            durasi_soal,
+            durasi_jeda_soal,
+            durasi_paket,
+            jml_soal,
+            jml_soal_siap,
+            aktif,
+            nama_dosen: nama_dosen,
+            mata_kuliah: nama_matkul,
+            kode_seksi: nomor_kosek,
+            created_at,
+            updated_at,
+          }
+        })
+
+        res.status(200).json({
+          message: 'Data seluruh ujian yang sedang berjalan ditemukan',
+          data: data,
+        })
+      }
+    } catch (err) {
+      console.error(err.message)
+      res.sendStatus(500)
+    }
+  },
+  getSelesai: async (req, res) => {
+    try {
+      if (req.user.role === 'admin') {
+        const getPaketSoalTerbit = await models.RelPaketSoalMahasiswa.findAll({
+          attributes: ['id_paket'],
+          where: {
+            status_ujian: 'sudah',
+          },
+        })
+
+        const getData = await models.PaketSoal.findAll({
+          attributes: {
+            exclude: ['id_paket', 'status_paket'],
+          },
+          where: {
+            id_paket: {
+              [Op.in]: getPaketSoalTerbit.map((paket) => paket.id_paket),
+            },
+            aktif: false,
           },
           include: [
             {
@@ -65,7 +727,7 @@ module.exports = {
                 attributes: ['nilai'],
                 where: {
                   nilai: {
-                    [Op.ne]: null,
+                    [Op.gte]: 0,
                   },
                 },
               },
@@ -73,12 +735,67 @@ module.exports = {
           ],
         })
 
-        if (data.length === 0) {
-          return res.status(404).json({ message: 'Data ujian tidak ditemukan' })
+        if (getData.length === 0) {
+          return res
+            .status(404)
+            .json({ message: 'Data ujian yang sudah selesai tidak ditemukan' })
         }
 
+        const data = getData.map((item) => {
+          const {
+            kode_paket,
+            jenis_ujian,
+            tgl_mulai,
+            waktu_mulai,
+            durasi_soal,
+            durasi_jeda_soal,
+            durasi_paket,
+            jml_soal,
+            jml_soal_siap,
+            aktif,
+            created_at,
+            updated_at,
+            soal_pg: [
+              {
+                dosen: { nama_dosen },
+              },
+            ],
+            kode_seksi: [
+              {
+                nomor_kosek,
+                mata_kuliah: { nama_matkul },
+              },
+            ],
+            mahasiswa: [
+              {
+                RelPaketSoalMahasiswa: { nilai, status_ujian },
+              },
+            ],
+          } = item.dataValues
+
+          return {
+            kode_paket,
+            jenis_ujian,
+            tgl_mulai,
+            waktu_mulai,
+            durasi_soal,
+            durasi_jeda_soal,
+            durasi_paket,
+            jml_soal,
+            jml_soal_siap,
+            aktif,
+            nilai,
+            status_ujian,
+            nama_dosen: nama_dosen,
+            mata_kuliah: nama_matkul,
+            kode_seksi: nomor_kosek,
+            created_at,
+            updated_at,
+          }
+        })
+
         res.status(200).json({
-          message: 'Data seluruh ujian ditemukan',
+          message: 'Data seluruh ujian yang sudah selesai ditemukan',
           data: data,
         })
       }
@@ -86,9 +803,12 @@ module.exports = {
       if (req.user.role === 'dosen') {
         const getPaketSoalTerbit = await models.RelPaketSoalMahasiswa.findAll({
           attributes: ['id_paket'],
+          where: {
+            status_ujian: 'sudah',
+          },
         })
 
-        const data = await models.PaketSoal.findAll({
+        const getData = await models.PaketSoal.findAll({
           attributes: {
             exclude: ['id_paket'],
           },
@@ -96,6 +816,7 @@ module.exports = {
             id_paket: {
               [Op.in]: getPaketSoalTerbit.map((paket) => paket.id_paket),
             },
+            aktif: false,
           },
           include: [
             {
@@ -136,7 +857,7 @@ module.exports = {
                 attributes: ['nilai'],
                 where: {
                   nilai: {
-                    [Op.ne]: null,
+                    [Op.gte]: 0,
                   },
                 },
               },
@@ -144,12 +865,67 @@ module.exports = {
           ],
         })
 
-        if (data.length === 0) {
-          return res.status(404).json({ message: 'Data ujian tidak ditemukan' })
+        if (getData.length === 0) {
+          return res
+            .status(404)
+            .json({ message: 'Data ujian yang sudah selesai tidak ditemukan' })
         }
 
+        const data = getData.map((item) => {
+          const {
+            kode_paket,
+            jenis_ujian,
+            tgl_mulai,
+            waktu_mulai,
+            durasi_soal,
+            durasi_jeda_soal,
+            durasi_paket,
+            jml_soal,
+            jml_soal_siap,
+            aktif,
+            created_at,
+            updated_at,
+            soal_pg: [
+              {
+                dosen: { nama_dosen },
+              },
+            ],
+            kode_seksi: [
+              {
+                nomor_kosek,
+                mata_kuliah: { nama_matkul },
+              },
+            ],
+            mahasiswa: [
+              {
+                RelPaketSoalMahasiswa: { nilai, status_ujian },
+              },
+            ],
+          } = item.dataValues
+
+          return {
+            kode_paket,
+            jenis_ujian,
+            tgl_mulai,
+            waktu_mulai,
+            durasi_soal,
+            durasi_jeda_soal,
+            durasi_paket,
+            jml_soal,
+            jml_soal_siap,
+            aktif,
+            nama_dosen: nama_dosen,
+            mata_kuliah: nama_matkul,
+            kode_seksi: nomor_kosek,
+            nilai,
+            status_ujian,
+            created_at,
+            updated_at,
+          }
+        })
+
         res.status(200).json({
-          message: 'Data seluruh ujian ditemukan',
+          message: 'Data seluruh ujian yang sudah selesai ditemukan',
           data: data,
         })
       }
@@ -159,10 +935,11 @@ module.exports = {
           attributes: ['id_paket'],
           where: {
             id_mhs: req.user.mahasiswa.id_mhs,
+            status_ujian: 'sudah',
           },
         })
 
-        const data = await models.PaketSoal.findAll({
+        const getData = await models.PaketSoal.findAll({
           attributes: {
             exclude: ['id_paket', 'status_paket'],
           },
@@ -170,6 +947,7 @@ module.exports = {
             id_paket: {
               [Op.in]: getPaketSoalTerbit.map((paket) => paket.id_paket),
             },
+            aktif: false,
           },
           include: [
             {
@@ -204,10 +982,10 @@ module.exports = {
               as: 'mahasiswa',
               attributes: ['id_mhs'],
               through: {
-                attributes: ['nilai'],
+                attributes: ['nilai', 'status_ujian'],
                 where: {
                   nilai: {
-                    [Op.ne]: null,
+                    [Op.gte]: 0,
                   },
                 },
               },
@@ -215,12 +993,67 @@ module.exports = {
           ],
         })
 
-        if (data.length === 0) {
-          return res.status(404).json({ message: 'Data ujian tidak ditemukan' })
+        if (getData.length === 0) {
+          return res
+            .status(404)
+            .json({ message: 'Data ujian yang sudah selesai tidak ditemukan' })
         }
 
+        const data = getData.map((item) => {
+          const {
+            kode_paket,
+            jenis_ujian,
+            tgl_mulai,
+            waktu_mulai,
+            durasi_soal,
+            durasi_jeda_soal,
+            durasi_paket,
+            jml_soal,
+            jml_soal_siap,
+            aktif,
+            created_at,
+            updated_at,
+            soal_pg: [
+              {
+                dosen: { nama_dosen },
+              },
+            ],
+            kode_seksi: [
+              {
+                nomor_kosek,
+                mata_kuliah: { nama_matkul },
+              },
+            ],
+            mahasiswa: [
+              {
+                RelPaketSoalMahasiswa: { nilai, status_ujian },
+              },
+            ],
+          } = item.dataValues
+
+          return {
+            kode_paket,
+            jenis_ujian,
+            tgl_mulai,
+            waktu_mulai,
+            durasi_soal,
+            durasi_jeda_soal,
+            durasi_paket,
+            jml_soal,
+            jml_soal_siap,
+            aktif,
+            nama_dosen: nama_dosen,
+            mata_kuliah: nama_matkul,
+            kode_seksi: nomor_kosek,
+            nilai,
+            status_ujian,
+            created_at,
+            updated_at,
+          }
+        })
+
         res.status(200).json({
-          message: 'Data seluruh ujian ditemukan',
+          message: 'Data seluruh ujian yang sudah selesai ditemukan',
           data: data,
         })
       }
@@ -238,7 +1071,7 @@ module.exports = {
 
       const id = req.params.idPaket
 
-      const data = await models.PaketSoal.findAll({
+      const getData = await models.PaketSoal.findOne({
         attributes: {
           exclude: ['id_paket', 'status_paket'],
         },
@@ -270,6 +1103,9 @@ module.exports = {
                 'id_dosen',
                 'id_matkul',
                 'id_semester',
+                'status_soal',
+                'jml_digunakan',
+                'jml_menjawab_benar',
                 'created_at',
                 'updated_at',
               ],
@@ -288,10 +1124,94 @@ module.exports = {
         ],
       })
 
-      if (data.length === 0) {
+      // if paket soal is not active
+      if (getData.aktif === false) {
+        return res.status(400).json({
+          message: `Paket soal dengan id ${id} tidak aktif`,
+        })
+      }
+
+      if (getData.length === 0) {
         return res
           .status(404)
           .json({ message: `Data ujian dengan id ${id} tidak ditemukan` })
+      }
+
+      const {
+        kode_paket,
+        jenis_ujian,
+        tgl_mulai,
+        waktu_mulai,
+        durasi_soal,
+        durasi_jeda_soal,
+        durasi_paket,
+        jml_soal,
+        jml_soal_siap,
+        aktif,
+        kode_seksi: [
+          {
+            nomor_kosek,
+            mata_kuliah: { nama_matkul },
+          },
+        ],
+        soal_pg: [
+          {
+            dosen: { nama_dosen },
+          },
+        ],
+      } = getData.dataValues
+
+      const soal_pg = getData.dataValues.soal_pg.map((item) => {
+        const {
+          soal,
+          gambar_soal,
+          jawaban_a,
+          gambar_jawaban_a,
+          jawaban_b,
+          gambar_jawaban_b,
+          jawaban_c,
+          gambar_jawaban_c,
+          jawaban_d,
+          gambar_jawaban_d,
+          jawaban_e,
+          gambar_jawaban_e,
+          kunci_jawaban,
+          RelSoalPaketSoal: { no_urut_soal },
+        } = item.dataValues
+
+        return {
+          no_urut_soal,
+          soal,
+          gambar_soal,
+          jawaban_a,
+          gambar_jawaban_a,
+          jawaban_b,
+          gambar_jawaban_b,
+          jawaban_c,
+          gambar_jawaban_c,
+          jawaban_d,
+          gambar_jawaban_d,
+          jawaban_e,
+          gambar_jawaban_e,
+          kunci_jawaban,
+        }
+      })
+
+      const data = {
+        kode_paket,
+        jenis_ujian,
+        tgl_mulai,
+        waktu_mulai,
+        durasi_soal,
+        durasi_jeda_soal,
+        durasi_paket,
+        jml_soal,
+        jml_soal_siap,
+        aktif,
+        nama_dosen: nama_dosen,
+        mata_kuliah: nama_matkul,
+        kode_seksi: nomor_kosek,
+        soal_pg,
       }
 
       res.status(200).json({
@@ -312,14 +1232,14 @@ module.exports = {
 
       const { jawaban_mhs } = req.body
 
-      const aktif = await models.PaketSoal.findOne({
+      const cekAktif = await models.PaketSoal.findOne({
         attributes: ['aktif'],
         where: {
           id_paket: req.params.idPaket,
         },
       })
 
-      if (aktif.aktif === false) {
+      if (cekAktif.aktif === false) {
         return res.status(400).json({
           message: 'Ujian sedang tidak aktif',
         })

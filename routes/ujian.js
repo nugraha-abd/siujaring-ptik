@@ -3,9 +3,9 @@ const router = express.Router()
 
 const ujianController = require('../controller/ujian')
 
-router
-  .route('/')
-  .get(ujianController.get)
+router.get('/', ujianController.get)
+router.get('/aktif', ujianController.getAktif)
+router.get('/selesai', ujianController.getSelesai)
 
 router
   .route('/:idPaket')
