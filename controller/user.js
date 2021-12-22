@@ -235,8 +235,8 @@ module.exports = {
 
         if (!getUser) {
           res.status(404).json({
-            success: false,
             message: `User dengan id ${id} tidak ditemukan`,
+            success: false,
           })
         }
 
