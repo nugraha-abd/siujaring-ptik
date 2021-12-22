@@ -31,16 +31,6 @@ module.exports = {
               attributes: [],
             },
           },
-          {
-            model: models.SoalPg,
-            as: 'soal_pg',
-            attributes: {
-              exclude: ['id_soal', 'id_dosen', 'id_matkul', 'id_semester'],
-            },
-            through: {
-              attributes: [],
-            },
-          },
         ],
       })
 
