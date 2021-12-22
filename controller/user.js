@@ -248,7 +248,7 @@ module.exports = {
         )
 
         const data = await models.User.findOne({
-          attributes: ['keterangan'],
+          attributes: ['keterangan', 'updated_at'],
           where: { id_user: id },
         })
 
