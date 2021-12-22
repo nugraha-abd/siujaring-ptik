@@ -311,13 +311,15 @@ module.exports = {
         ],
       })
 
-      // Delete the images
-      for (const gambar in dataGambar) {
-        if (dataGambar[gambar]) {
-          const path = dataGambar[gambar]
-          fs.unlinkSync(path)
+      // Get the property value from dataGambar
+      let arrDataGambar = Object.values(dataGambar.dataValues)
+
+      // Delete the images from storage
+      arrDataGambar.forEach((gambar) => {
+        if (gambar) {
+          fs.unlinkSync(gambar)
         }
-      }
+      })
 
       await models.SoalPg.destroy({
         where: { id_soal: id },
