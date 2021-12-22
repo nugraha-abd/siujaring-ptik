@@ -138,7 +138,7 @@ module.exports = {
 
       const data = await models.MataKuliah.findOne({
         attributes: {
-          exclude: ['id_user'],
+          exclude: ['id_matkul'],
         },
         where: { id_matkul: id },
       })
