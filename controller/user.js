@@ -226,14 +226,14 @@ module.exports = {
       if (req.user.role == 'admin') {
         const { keterangan } = req.body
 
-        const data = await models.User.findOne({
+        const getUser = await models.User.findOne({
           attributes: {
             exclude: ['id_user'],
           },
           where: { id_user: id },
         })
 
-        if (!data) {
+        if (!getUser) {
           res.status(404).json({
             success: false,
             message: `User dengan id ${id} tidak ditemukan`,
@@ -246,6 +246,11 @@ module.exports = {
           },
           { where: { id_user: id } }
         )
+
+        const data = await models.User.findOne({
+          attributes: ['keterangan'],
+          where: { id_user: id },
+        })
 
         res.status(200).json({
           message: 'Berhasil mengubah keterangan akun',
