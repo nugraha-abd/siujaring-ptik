@@ -46,7 +46,7 @@ module.exports = {
       dataDosen.push({
         id_user: userDosen[i - 1].id_user,
         nama_dosen: namaDosen[i - 1],
-        nip: `1495700030${pad}`,
+        nip: `2000${pad}`,
         nidk: `19600${pad}`,
         nidn: `14700${pad}`,
         no_telpon: `081900000${pad}`,
