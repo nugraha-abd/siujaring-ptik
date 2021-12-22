@@ -5,7 +5,7 @@ const { models } = require('../models/index')
 module.exports = {
   get: async (req, res) => {
     try {
-      const data = await models.PaketSoal.findAll({
+      const getData = await models.PaketSoal.findAll({
         attributes: {
           exclude: ['id_paket'],
         },
@@ -31,14 +31,67 @@ module.exports = {
               attributes: [],
             },
           },
+          {
+            model: models.SoalPg,
+            as: 'soal_pg',
+            attributes: [],
+            where: {
+              id_dosen: req.user.dosen.id_dosen,
+            },
+            through: {
+              attributes: [],
+            },
+          },
         ],
       })
 
-      if (data.length === 0) {
+      if (getData.length === 0) {
         return res
           .status(404)
           .json({ message: 'Data paket soal tidak ditemukan' })
       }
+
+      const data = getData.map((item) => {
+        const {
+          kode_paket,
+          jenis_ujian,
+          tgl_mulai,
+          waktu_mulai,
+          durasi_soal,
+          durasi_jeda_soal,
+          durasi_paket,
+          jml_soal,
+          jml_soal_siap,
+          aktif,
+          created_at,
+          updated_at,
+          kode_seksi: [
+            {
+              nomor_kosek,
+              mata_kuliah: { nama_matkul },
+              semester: { semester },
+            },
+          ],
+        } = item.dataValues
+
+        return {
+          kode_paket,
+          jenis_ujian,
+          tgl_mulai,
+          waktu_mulai,
+          durasi_soal,
+          durasi_jeda_soal,
+          durasi_paket,
+          jml_soal,
+          jml_soal_siap,
+          aktif,
+          mata_kuliah: nama_matkul,
+          kode_seksi: nomor_kosek,
+          semester,
+          created_at,
+          updated_at,
+        }
+      })
 
       res.status(200).json({
         message: 'Data seluruh paket soal ditemukan',
