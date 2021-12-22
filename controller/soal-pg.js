@@ -68,6 +68,7 @@ module.exports = {
 
       const {
         id_matkul,
+        id_semester,
         soal,
         jawaban_a,
         jawaban_b,
@@ -108,6 +109,7 @@ module.exports = {
 
       const data = await models.SoalPg.create({
         id_dosen,
+        id_semester,
         id_matkul,
         soal,
         gambar_soal: pathGambarSoal,
