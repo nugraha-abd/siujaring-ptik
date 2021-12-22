@@ -40,7 +40,6 @@ module.exports = (db) => {
       created_at: {
         type: 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         allowNull: false,
-        defaultValue: Sequelize.NOW,
       },
       updated_at: {
         type: 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
