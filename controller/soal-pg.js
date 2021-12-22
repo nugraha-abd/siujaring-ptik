@@ -12,6 +12,9 @@ module.exports = {
         attributes: {
           exclude: ['id_soal', 'id_matkul', 'id_dosen', 'id_semester'],
         },
+        where: {
+          id_dosen: req.user.dosen.id_dosen,
+        },
         include: [
           {
             model: models.MataKuliah,
