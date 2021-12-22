@@ -78,7 +78,9 @@ module.exports = {
       if (data.length === 0) {
         return res
           .status(404)
-          .json({ message: 'Data mata kuliah tidak ditemukan' })
+          .json({
+            message: 'Data mata kuliah yang sedang diampu tidak ditemukan',
+          })
       }
 
       res.status(200).json({
