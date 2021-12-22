@@ -58,11 +58,9 @@ module.exports = (db) => {
       },
       created_at: {
         type: 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
-        allowNull: false,
       },
       updated_at: {
         type: 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP',
-        allowNull: false,
       },
     },
     { tableName: 'tb_paket_soal' }
