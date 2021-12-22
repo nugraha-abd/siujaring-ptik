@@ -15,9 +15,8 @@ module.exports = (db) => {
         unique: true,
       },
       created_at: {
-        type: Sequelize.DATE,
+        type: 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         allowNull: false,
-        defaultValue: Sequelize.NOW,
       },
     },
     { tableName: 'ref_semester' }

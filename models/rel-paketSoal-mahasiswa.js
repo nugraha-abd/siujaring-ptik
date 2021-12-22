@@ -34,9 +34,8 @@ module.exports = (db) => {
         allowNull: false,
       },
       created_at: {
-        type: Sequelize.DATE,
+        type: 'TIMESTAMP DEFAULT CURRENT_TIMESTAMP',
         allowNull: false,
-        defaultValue: Sequelize.NOW,
       },
     },
     { tableName: 'rel_paket_soal_mahasiswa' }
