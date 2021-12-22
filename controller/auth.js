@@ -102,7 +102,7 @@ module.exports = {
       if (password_baru !== confirm_password)
         return res
           .status(400)
-          .json({ success: false, message: 'Password tidak sama' })
+          .json({ message: 'Password tidak sama', success: false })
 
       const findUser = await models.User.findOne({
         where: { id_user: req.user.id_user },
@@ -113,7 +113,7 @@ module.exports = {
       if (!isValid)
         return res
           .status(401)
-          .json({ success: false, message: 'Password lama salah' })
+          .json({ message: 'Password lama salah', success: false })
 
       const hashedPassword = await bcrypt.hash(password_baru, 10)
 
