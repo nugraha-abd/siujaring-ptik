@@ -10,6 +10,7 @@ router
 
 router
   .route('/:idPaket')
+  .get(paketSoalController.getById)
   .put(paketSoalController.put)
   .delete(paketSoalController.delete)
 

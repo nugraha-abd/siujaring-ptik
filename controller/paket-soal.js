@@ -102,6 +102,151 @@ module.exports = {
       res.sendStatus(500)
     }
   },
+  getById: async (req, res) => {
+    try {
+      const id = req.params.idPaket
+
+      const getData = await models.PaketSoal.findOne({
+        attributes: {
+          exclude: ['id_paket'],
+        },
+        include: [
+          {
+            model: models.KodeSeksi,
+            as: 'kode_seksi',
+            attributes: ['nomor_kosek'],
+            // get mata kuliah name from tb_kode_seksi
+            include: [
+              {
+                model: models.MataKuliah,
+                as: 'mata_kuliah',
+                attributes: ['nama_matkul'],
+              },
+              {
+                model: models.Semester,
+                as: 'semester',
+                attributes: ['semester'],
+              },
+            ],
+            through: {
+              attributes: [],
+            },
+          },
+          {
+            model: models.SoalPg,
+            as: 'soal_pg',
+            attributes: {
+              exclude: [
+                'id_soal',
+                'id_dosen',
+                'id_matkul',
+                'id_semester',
+                'status_soal',
+              ],
+            },
+            where: {
+              id_dosen: req.user.dosen.id_dosen,
+            },
+            through: {
+              attributes: [],
+            },
+          },
+        ],
+        where: {
+          id_paket: id,
+        },
+      })
+
+      if (getData === null) {
+        return res
+          .status(404)
+          .json({ message: `Data paket soal dengan id ${id} tidak ditemukan` })
+      }
+
+      const {
+        kode_paket,
+        jenis_ujian,
+        tgl_mulai,
+        waktu_mulai,
+        durasi_soal,
+        durasi_jeda_soal,
+        durasi_paket,
+        jml_soal,
+        jml_soal_siap,
+        aktif,
+        kode_seksi: [
+          {
+            nomor_kosek,
+            mata_kuliah: { nama_matkul },
+            semester: { semester },
+          },
+        ],
+      } = getData.dataValues
+
+      const soal_pg = getData.dataValues.soal_pg.map((item) => {
+        const {
+          soal,
+          gambar_soal,
+          jawaban_a,
+          gambar_jawaban_a,
+          jawaban_b,
+          gambar_jawaban_b,
+          jawaban_c,
+          gambar_jawaban_c,
+          jawaban_d,
+          gambar_jawaban_d,
+          jawaban_e,
+          gambar_jawaban_e,
+          kunci_jawaban,
+          jml_digunakan,
+          jml_menjawab_benar,
+        } = item.dataValues
+
+        return {
+          soal,
+          gambar_soal,
+          jawaban_a,
+          gambar_jawaban_a,
+          jawaban_b,
+          gambar_jawaban_b,
+          jawaban_c,
+          gambar_jawaban_c,
+          jawaban_d,
+          gambar_jawaban_d,
+          jawaban_e,
+          gambar_jawaban_e,
+          kunci_jawaban,
+          jml_digunakan,
+          jml_menjawab_benar,
+        }
+      })
+
+      const data = {
+        kode_paket,
+        jenis_ujian,
+        tgl_mulai,
+        waktu_mulai,
+        durasi_soal,
+        durasi_jeda_soal,
+        durasi_paket,
+        jml_soal,
+        jml_soal_siap,
+        aktif,
+        mata_kuliah: nama_matkul,
+        kode_seksi: nomor_kosek,
+        semester,
+        soal_pg,
+      }
+
+      res.status(200).json({
+        message: `Data paket soal dengan id ${id} ditemukan`,
+        data: data,
+      })
+    } catch (err) {
+      console.error(err.message)
+      res.sendStatus(500)
+    }
+  },
   post: async (req, res) => {
     try {
       if (req.user.role !== 'dosen')
