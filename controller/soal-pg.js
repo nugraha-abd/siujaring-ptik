@@ -1,3 +1,7 @@
+const fs = require('fs')
+
+const { Op } = require('sequelize')
+
 const { models } = require('../models/index')
 
 module.exports = {
@@ -151,6 +155,7 @@ module.exports = {
 
       const {
         id_matkul,
+        id_semester,
         soal,
         jawaban_a,
         jawaban_b,
@@ -186,29 +191,49 @@ module.exports = {
         ],
       })
 
-      // Delete the images
-      for (const gambar in dataGambar) {
-        if (dataGambar[gambar]) {
-          const path = dataGambar[gambar]
-          fs.unlinkSync(path)
+      // Get the property value from dataGambar
+      let arrDataGambar = Object.values(dataGambar.dataValues)
+
+      // Delete the images from storage
+      arrDataGambar.forEach((gambar) => {
+        if (gambar) {
+          fs.unlinkSync(gambar)
         }
-      }
+      })
+
+      const pathGambarSoal = gambar_soal ? gambar_soal[0].path : null
+      const pathGambarJawabanA = gambar_jawaban_a
+        ? gambar_jawaban_a[0].path
+        : null
+      const pathGambarJawabanB = gambar_jawaban_b
+        ? gambar_jawaban_b[0].path
+        : null
+      const pathGambarJawabanC = gambar_jawaban_c
+        ? gambar_jawaban_c[0].path
+        : null
+      const pathGambarJawabanD = gambar_jawaban_d
+        ? gambar_jawaban_d[0].path
+        : null
+      const pathGambarJawabanE = gambar_jawaban_e
+        ? gambar_jawaban_e[0].path
+        : null
 
       await models.SoalPg.update(
         {
           id_matkul,
+          id_semester,
           soal,
-          gambar_soal: gambar_soal.path,
+          gambar_soal: pathGambarSoal,
           jawaban_a,
-          gambar_jawaban_a: gambar_jawaban_a.path,
+          gambar_jawaban_a: pathGambarJawabanA,
           jawaban_b,
-          gambar_jawaban_b: gambar_jawaban_b[0].path,
+          gambar_jawaban_b: pathGambarJawabanB,
           jawaban_c,
-          gambar_jawaban_c: gambar_jawaban_c[0].path,
+          gambar_jawaban_c: pathGambarJawabanC,
           jawaban_d,
-          gambar_jawaban_d: gambar_jawaban_d[0].path,
+          gambar_jawaban_d: pathGambarJawabanD,
           jawaban_e,
-          gambar_jawaban_e: gambar_jawaban_e[0].path,
+          gambar_jawaban_e: pathGambarJawabanE,
           kunci_jawaban,
           status_soal, // draf atau terbit
         },
@@ -219,38 +244,38 @@ module.exports = {
         attributes: {
           exclude: ['id_soal', 'id_dosen', 'id_matkul', 'id_semester'],
         },
+        where: {
+          [Op.and]: [{ id_soal: id }, { id_dosen: req.user.dosen.id_dosen }],
+        },
         include: [
           {
             model: models.MataKuliah,
+            as: 'mata_kuliah',
             attributes: {
-              exclude: ['id_mhs', 'id_user'],
+              exclude: ['id_matkul', 'created_at', 'updated_at'],
             },
-            where: { id_matkul },
           },
           {
             model: models.Dosen,
             as: 'dosen',
             attributes: {
-              exclude: ['id_dosen', 'id_user'],
+              exclude: ['id_dosen', 'id_user', 'created_at', 'updated_at'],
             },
-            where: { id_dosen: req.user.dosen.id_dosen },
           },
           {
             model: models.Semester,
             as: 'semester',
             attributes: {
-              exclude: ['id_semester'],
+              exclude: ['id_semester', 'created_at', 'updated_at'],
             },
-            where: { id_semester: 'current_semester' },
           },
         ],
-        where: { id_soal: id },
       })
 
       if (!data) {
         res.status(404).json({
-          success: false,
           message: `Soal dengan id ${id} tidak ditemukan`,
+          success: false,
         })
       }
 
