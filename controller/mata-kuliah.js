@@ -76,11 +76,10 @@ module.exports = {
       const data = [...new Set(arrayMataKuliah)]
 
       if (data.length === 0) {
-        return res
-          .status(404)
-          .json({
-            message: 'Data mata kuliah yang sedang diampu tidak ditemukan',
-          })
+        return res.status(404).json({
+          message: 'Data mata kuliah yang sedang diampu tidak ditemukan',
+          success: false,
+        })
       }
 
       res.status(200).json({
