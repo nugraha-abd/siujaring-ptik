@@ -253,7 +253,7 @@ module.exports = {
         })
 
         res.status(200).json({
-          message: `Berhasil mengubah keterangan akun dengan id ${id}`,
+          message: `Berhasil mengubah keterangan akun dengan id user ${id}`,
           data: data,
         })
       }
@@ -292,7 +292,7 @@ module.exports = {
         })
 
         res.status(200).json({
-          message: `Berhasil mengubah nomor telpon dengan id ${id}`,
+          message: `Berhasil mengubah nomor telpon dengan id user ${id}`,
           data: data,
         })
       } else {
