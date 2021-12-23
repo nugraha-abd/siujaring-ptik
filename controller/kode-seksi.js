@@ -110,8 +110,15 @@ module.exports = {
         data: data,
       })
     } catch (err) {
-      console.error(err.message)
-      res.sendStatus(500)
+      if (err.message === 'Validation error') {
+        return res.status(400).json({
+          success: false,
+          message: 'nomor_kosek must be unique',
+        })
+      } else {
+        console.error(err.message)
+        res.sendStatus(500)
+      }
     }
   },
   put: async (req, res) => {
@@ -156,8 +163,15 @@ module.exports = {
         data: data,
       })
     } catch (err) {
-      console.error(err.message)
-      res.sendStatus(500)
+      if (err.message === 'Validation error') {
+        return res.status(400).json({
+          success: false,
+          message: 'nomor_kosek must be unique',
+        })
+      } else {
+        console.error(err.message)
+        res.sendStatus(500)
+      }
     }
   },
   tambahMahasiswa: async (req, res) => {
