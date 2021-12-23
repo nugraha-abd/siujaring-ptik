@@ -19,7 +19,6 @@ module.exports = {
       const data = await models.KodeSeksi.findAll({
         attributes: {
           exclude: [
-            'id_kosek',
             'id_matkul',
             'id_dosen1',
             'id_dosen2',
