@@ -305,6 +305,19 @@ module.exports = {
 
       const id = req.params.idSoal
 
+      const getData = await models.SoalPg.findOne({
+        where: {
+          id_soal: id,
+        },
+      })
+
+      if (!getData) {
+        res.status(404).json({
+          message: `Soal dengan id ${id} tidak ditemukan`,
+          success: false,
+        })
+      }
+
       // Get images from database and delete from storage
       // if there are any updated images
       const dataGambar = await models.SoalPg.findOne({
