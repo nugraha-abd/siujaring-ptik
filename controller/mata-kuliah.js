@@ -13,11 +13,7 @@ module.exports = {
           message: 'Anda bukan admin',
         })
 
-      const data = await models.MataKuliah.findAll({
-        attributes: {
-          exclude: ['id_matkul'],
-        },
-      })
+      const data = await models.MataKuliah.findAll()
 
       if (data.length === 0) {
         return res
