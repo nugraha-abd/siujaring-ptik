@@ -177,6 +177,19 @@ module.exports = {
 
       const id = req.params.idSoal
 
+      const getData = await models.SoalPg.findOne({
+        where: {
+          id_soal: id,
+        },
+      })
+
+      if (!getData) {
+        res.status(404).json({
+          message: `Soal dengan id ${id} tidak ditemukan`,
+          success: false,
+        })
+      }
+
       // Get images from database and delete from storage
       // if there are any updated images value
       const dataGambar = await models.SoalPg.findOne({
@@ -191,15 +204,17 @@ module.exports = {
         ],
       })
 
-      // Get the property value from dataGambar
-      let arrDataGambar = Object.values(dataGambar.dataValues)
+      if (dataGambar !== null) {
+        // Get the property value from dataGambar
+        let arrDataGambar = Object.values(dataGambar.dataValues)
 
-      // Delete the images from storage
-      arrDataGambar.forEach((gambar) => {
-        if (gambar) {
-          fs.unlinkSync(gambar)
-        }
-      })
+        // Delete the images from storage
+        arrDataGambar.forEach((gambar) => {
+          if (gambar) {
+            fs.unlinkSync(gambar)
+          }
+        })
+      }
 
       const pathGambarSoal = gambar_soal ? gambar_soal[0].path : null
       const pathGambarJawabanA = gambar_jawaban_a
@@ -272,13 +287,6 @@ module.exports = {
         ],
       })
 
-      if (!data) {
-        res.status(404).json({
-          message: `Soal dengan id ${id} tidak ditemukan`,
-          success: false,
-        })
-      }
-
       res.status(200).json({
         message: 'Berhasil mengubah data soal',
         data: data,
@@ -311,8 +319,10 @@ module.exports = {
         ],
       })
 
+      let arrDataGambar = []
       // Get the property value from dataGambar
-      let arrDataGambar = Object.values(dataGambar.dataValues)
+      if (dataGambar !== null)
+        arrDataGambar = Object.values(dataGambar.dataValues)
 
       // Delete the images from storage
       arrDataGambar.forEach((gambar) => {
