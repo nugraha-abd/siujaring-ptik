@@ -574,9 +574,16 @@ module.exports = {
         },
       })
 
+      if (!cekStatus)
+        return res.status(404).json({
+          message: `Paket soal dengan id ${id} tidak ditemukan`,
+          success: false,
+        })
+
       if (cekStatus.jml_soal_siap !== cekStatus.jml_soal)
         return res.status(400).json({
           message: `Jumlah soal pada paket soal dengan id ${id} masih kurang`,
+          success: false,
         })
 
       // get id_soal from RelSoalPaketSoal where id_paket equals to id
@@ -586,11 +593,6 @@ module.exports = {
           id_paket: id,
         },
       })
-
-      if (!soal)
-        return res.status(404).json({
-          message: `Paket soal dengan id ${id} tidak ditemukan`,
-        })
 
       // get id_soal from soal where id_paket equals to soal.id_paket
       const dataSoal = await models.SoalPg.findAll({
@@ -609,6 +611,7 @@ module.exports = {
         if (item !== 'draf')
           return res.status(400).json({
             message: `Soal dengan id ${item} sudah belum diterbitkan`,
+            success: false,
           })
       })
 
