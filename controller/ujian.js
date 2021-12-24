@@ -1137,7 +1137,7 @@ module.exports = {
         ],
       })
 
-      if (getData.length === 0) {
+      if (!getData) {
         return res.status(404).json({
           message: `Data ujian dengan id ${id} tidak ditemukan`,
           success: false,
