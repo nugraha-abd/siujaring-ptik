@@ -602,7 +602,10 @@ module.exports = {
         },
       })
 
-      dataSoal.status_soal.forEach((item) => {
+      // get status_soal object value from dataSoal
+      const statusSoal = dataSoal.map((item) => item.status_soal)
+
+      statusSoal.forEach((item) => {
         if (item !== 'draf')
           return res.status(400).json({
             message: `Soal dengan id ${item} sudah belum diterbitkan`,
