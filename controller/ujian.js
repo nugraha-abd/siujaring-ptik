@@ -55,9 +55,10 @@ module.exports = {
         })
 
         if (getData.length === 0) {
-          return res
-            .status(404)
-            .json({ message: 'Data ujian yang belum berjalan tidak ditemukan' })
+          return res.status(404).json({
+            message: 'Data ujian yang belum berjalan tidak ditemukan',
+            success: false,
+          })
         }
 
         const data = getData.map((item) => {
