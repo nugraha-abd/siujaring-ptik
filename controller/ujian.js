@@ -1247,12 +1247,21 @@ module.exports = {
 
       const { jawaban_mhs } = req.body
 
+      const id = req.params.idPaket
+
       const cekAktif = await models.PaketSoal.findOne({
         attributes: ['aktif'],
         where: {
-          id_paket: req.params.idPaket,
+          id_paket: id,
         },
       })
+
+      if (!cekAktif) {
+        return res.status(404).json({
+          message: `Data ujian dengan id ${id} tidak ditemukan`,
+          success: false,
+        })
+      }
 
       if (cekAktif.aktif === false) {
         return res.status(400).json({
@@ -1260,8 +1269,6 @@ module.exports = {
           success: false,
         })
       }
-
-      const id = req.params.idPaket
 
       await models.RelPaketSoalMahasiswa.update(
         {
@@ -1276,6 +1283,13 @@ module.exports = {
         attributes: ['jawaban_mhs'],
         where: { id_paket: id, id_mhs: req.user.mahasiswa.id_mhs },
       })
+
+      if (!data) {
+        return res.status(403).json({
+          message: `Anda tidak mendapatkan paket soal ujian dengan id ${id}`,
+          success: false,
+        })
+      }
 
       res.status(200).json({
         message: 'Berhasil memasukkan pilihan jawaban',
