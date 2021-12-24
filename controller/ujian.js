@@ -1137,17 +1137,17 @@ module.exports = {
         ],
       })
 
-      // if paket soal is not active
-      if (getData.aktif === false) {
-        return res.status(400).json({
-          message: `Paket soal dengan id ${id} tidak aktif`,
+      if (getData.length === 0) {
+        return res.status(404).json({
+          message: `Data ujian dengan id ${id} tidak ditemukan`,
           success: false,
         })
       }
 
-      if (getData.length === 0) {
-        return res.status(404).json({
-          message: `Data ujian dengan id ${id} tidak ditemukan`,
+      // if paket soal is not active
+      if (getData.aktif === false) {
+        return res.status(400).json({
+          message: `Paket soal dengan id ${id} tidak aktif`,
           success: false,
         })
       }
@@ -1301,12 +1301,10 @@ module.exports = {
       })
 
       if (getJawabanMhs === null) {
-        return res
-          .status(404)
-          .json({
-            message: `Data nilai dengan id ${id} tidak ditemukan`,
-            success: false,
-          })
+        return res.status(404).json({
+          message: `Data nilai dengan id ${id} tidak ditemukan`,
+          success: false,
+        })
       }
 
       const getSoal = await models.RelSoalPaketSoal.findAll({
