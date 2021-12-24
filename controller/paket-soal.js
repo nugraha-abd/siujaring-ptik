@@ -464,7 +464,7 @@ module.exports = {
         }
       )
 
-      const data = models.PaketSoal.findOne({
+      const data = await models.PaketSoal.findOne({
         attributes: {
           exclude: ['id_paket'],
         },
