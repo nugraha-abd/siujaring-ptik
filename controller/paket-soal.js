@@ -158,9 +158,10 @@ module.exports = {
       })
 
       if (getData === null) {
-        return res
-          .status(404)
-          .json({ message: `Data paket soal dengan id ${id} tidak ditemukan` })
+        return res.status(404).json({
+          message: `Data paket soal dengan id ${id} tidak ditemukan`,
+          success: false,
+        })
       }
 
       const {
