@@ -402,6 +402,7 @@ module.exports = {
       if (!findPaketSoal)
         return res.status(404).json({
           message: `Paket soal dengan id ${id} tidak ditemukan`,
+          success: false,
         })
 
       await models.RelKodeSeksiPaketSoal.update(
