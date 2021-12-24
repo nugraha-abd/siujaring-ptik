@@ -1006,9 +1006,10 @@ module.exports = {
         })
 
         if (getData.length === 0) {
-          return res
-            .status(404)
-            .json({ message: 'Data ujian yang sudah selesai tidak ditemukan' })
+          return res.status(404).json({
+            message: 'Data ujian yang sudah selesai tidak ditemukan',
+            success: false,
+          })
         }
 
         const data = getData.map((item) => {
@@ -1140,13 +1141,15 @@ module.exports = {
       if (getData.aktif === false) {
         return res.status(400).json({
           message: `Paket soal dengan id ${id} tidak aktif`,
+          success: false,
         })
       }
 
       if (getData.length === 0) {
-        return res
-          .status(404)
-          .json({ message: `Data ujian dengan id ${id} tidak ditemukan` })
+        return res.status(404).json({
+          message: `Data ujian dengan id ${id} tidak ditemukan`,
+          success: false,
+        })
       }
 
       const {
@@ -1254,6 +1257,7 @@ module.exports = {
       if (cekAktif.aktif === false) {
         return res.status(400).json({
           message: 'Ujian sedang tidak aktif',
+          success: false,
         })
       }
 
@@ -1299,7 +1303,10 @@ module.exports = {
       if (getJawabanMhs === null) {
         return res
           .status(404)
-          .json({ message: `Data nilai dengan id ${id} tidak ditemukan` })
+          .json({
+            message: `Data nilai dengan id ${id} tidak ditemukan`,
+            success: false,
+          })
       }
 
       const getSoal = await models.RelSoalPaketSoal.findAll({
