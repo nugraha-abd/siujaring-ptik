@@ -311,7 +311,7 @@ module.exports = {
 
       await models.RelSoalPaketSoal.bulkCreate(seluruhSoal)
 
-      const data = models.PaketSoal.findOne({
+      const data = await models.PaketSoal.findOne({
         attributes: {
           exclude: ['id_paket'],
         },
@@ -360,8 +360,15 @@ module.exports = {
         data: data,
       })
     } catch (err) {
-      console.error(err.message)
-      res.sendStatus(500)
+      if (err.message === 'Validation error') {
+        return res.status(400).json({
+          message: 'kode_paket must be unique',
+          success: false,
+        })
+      } else {
+        console.error(err.message)
+        res.sendStatus(500)
+      }
     }
   },
   put: async (req, res) => {
