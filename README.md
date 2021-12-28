@@ -2,7 +2,7 @@
 RESTFul API untuk Aplikasi Ujian Pilihan Ganda Daring menggunakan tools sebagai berikut:
 
 - Framework => **Express.js**
-- DBMS => **MySQL** 
+- DBMS => **MariaDB** 
 - ORM => **Sequelize**
 - Web Server => **XAMPP**
 
