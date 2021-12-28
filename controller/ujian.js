@@ -12,7 +12,7 @@ module.exports = {
 
         const getData = await models.PaketSoal.findAll({
           attributes: {
-            exclude: ['id_paket', 'status_paket'],
+            exclude: ['status_paket'],
           },
           where: {
             id_paket: {
@@ -119,9 +119,6 @@ module.exports = {
         })
 
         const getData = await models.PaketSoal.findAll({
-          attributes: {
-            exclude: ['id_paket'],
-          },
           where: {
             id_paket: {
               [Op.in]: getPaketSoalTerbit.map((paket) => paket.id_paket),
@@ -231,7 +228,7 @@ module.exports = {
 
         const getData = await models.PaketSoal.findAll({
           attributes: {
-            exclude: ['id_paket', 'status_paket'],
+            exclude: ['status_paket'],
           },
           where: {
             id_paket: {
@@ -357,7 +354,7 @@ module.exports = {
 
         const getData = await models.PaketSoal.findAll({
           attributes: {
-            exclude: ['id_paket', 'status_paket'],
+            exclude: ['status_paket'],
           },
           where: {
             id_paket: {
@@ -464,9 +461,6 @@ module.exports = {
         })
 
         const getData = await models.PaketSoal.findAll({
-          attributes: {
-            exclude: ['id_paket'],
-          },
           where: {
             id_paket: {
               [Op.in]: getPaketSoalTerbit.map((paket) => paket.id_paket),
@@ -576,7 +570,7 @@ module.exports = {
 
         const getData = await models.PaketSoal.findAll({
           attributes: {
-            exclude: ['id_paket', 'status_paket'],
+            exclude: ['status_paket'],
           },
           where: {
             id_paket: {
@@ -690,7 +684,7 @@ module.exports = {
 
         const getData = await models.PaketSoal.findAll({
           attributes: {
-            exclude: ['id_paket', 'status_paket'],
+            exclude: ['status_paket'],
           },
           where: {
             id_paket: {
@@ -820,9 +814,6 @@ module.exports = {
         })
 
         const getData = await models.PaketSoal.findAll({
-          attributes: {
-            exclude: ['id_paket'],
-          },
           where: {
             id_paket: {
               [Op.in]: getPaketSoalTerbit.map((paket) => paket.id_paket),
@@ -953,7 +944,7 @@ module.exports = {
 
         const getData = await models.PaketSoal.findAll({
           attributes: {
-            exclude: ['id_paket', 'status_paket'],
+            exclude: ['status_paket'],
           },
           where: {
             id_paket: {
@@ -1086,7 +1077,7 @@ module.exports = {
 
       const getData = await models.PaketSoal.findOne({
         attributes: {
-          exclude: ['id_paket', 'status_paket'],
+          exclude: ['status_paket'],
         },
         where: {
           id_paket: id,
@@ -1112,7 +1103,6 @@ module.exports = {
             as: 'soal_pg',
             attributes: {
               exclude: [
-                'id_soal',
                 'id_dosen',
                 'id_matkul',
                 'id_semester',

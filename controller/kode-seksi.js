@@ -30,37 +30,31 @@ module.exports = {
           {
             model: models.MataKuliah,
             as: 'mata_kuliah',
-            attributes: {
-              exclude: ['id_matkul'],
-            },
           },
           {
             model: models.Dosen,
             as: 'dosen1',
             attributes: {
-              exclude: ['id_dosen', 'id_user'],
+              exclude: ['id_user'],
             },
           },
           {
             model: models.Dosen,
             as: 'dosen2',
             attributes: {
-              exclude: ['id_dosen', 'id_user'],
+              exclude: ['id_user'],
             },
           },
           {
             model: models.Dosen,
             as: 'dosen3',
             attributes: {
-              exclude: ['id_dosen', 'id_user'],
+              exclude: ['id_user'],
             },
           },
           {
             model: models.Semester,
             as: 'semester',
-            attributes: {
-              exclude: ['id_semester'],
-            },
           },
         ],
       })

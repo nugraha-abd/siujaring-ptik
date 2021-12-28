@@ -6,25 +6,22 @@ module.exports = {
   get: async (req, res) => {
     try {
       const getData = await models.PaketSoal.findAll({
-        attributes: {
-          exclude: ['id_paket'],
-        },
         include: [
           {
             model: models.KodeSeksi,
             as: 'kode_seksi',
-            attributes: ['nomor_kosek'],
+            attributes: ['id_kosek', 'nomor_kosek'],
             // get mata kuliah name from tb_kode_seksi
             include: [
               {
                 model: models.MataKuliah,
                 as: 'mata_kuliah',
-                attributes: ['nama_matkul'],
+                attributes: ['id_matkul', 'nama_matkul'],
               },
               {
                 model: models.Semester,
                 as: 'semester',
-                attributes: ['semester'],
+                attributes: ['id_semester', 'semester'],
               },
             ],
             through: {
@@ -107,25 +104,22 @@ module.exports = {
       const id = req.params.idPaket
 
       const getData = await models.PaketSoal.findOne({
-        attributes: {
-          exclude: ['id_paket'],
-        },
         include: [
           {
             model: models.KodeSeksi,
             as: 'kode_seksi',
-            attributes: ['nomor_kosek'],
+            attributes: ['id_kosek', 'nomor_kosek'],
             // get mata kuliah name from tb_kode_seksi
             include: [
               {
                 model: models.MataKuliah,
                 as: 'mata_kuliah',
-                attributes: ['nama_matkul'],
+                attributes: ['id_matkul', 'nama_matkul'],
               },
               {
                 model: models.Semester,
                 as: 'semester',
-                attributes: ['semester'],
+                attributes: ['id_semester', 'semester'],
               },
             ],
             through: {
@@ -136,13 +130,7 @@ module.exports = {
             model: models.SoalPg,
             as: 'soal_pg',
             attributes: {
-              exclude: [
-                'id_soal',
-                'id_dosen',
-                'id_matkul',
-                'id_semester',
-                'status_soal',
-              ],
+              exclude: ['status_soal'],
             },
             where: {
               id_dosen: req.user.dosen.id_dosen,
@@ -313,27 +301,24 @@ module.exports = {
       await models.RelSoalPaketSoal.bulkCreate(seluruhSoal)
 
       const data = await models.PaketSoal.findOne({
-        attributes: {
-          exclude: ['id_paket'],
-        },
         include: [
           {
             model: models.KodeSeksi,
             as: 'kode_seksi',
-            attributes: ['nomor_kosek'],
+            attributes: ['id_kosek', 'nomor_kosek'],
             // get mata kuliah name from tb_kode_seksi
             include: [
               {
                 model: models.MataKuliah,
                 as: 'mata_kuliah',
-                attributes: ['nama_matkul'],
+                attributes: ['id_matkul', 'nama_matkul'],
               },
             ],
             include: [
               {
                 model: models.Semester,
                 as: 'semester',
-                attributes: ['semester'],
+                attributes: ['id_semester', 'semester'],
               },
             ],
             through: {
@@ -344,7 +329,7 @@ module.exports = {
             model: models.SoalPg,
             as: 'soal_pg',
             attributes: {
-              exclude: ['id_soal', 'id_dosen', 'id_matkul', 'id_semester'],
+              exclude: ['id_dosen', 'id_matkul', 'id_semester'],
             },
             through: {
               attributes: [],
@@ -467,27 +452,24 @@ module.exports = {
       )
 
       const data = await models.PaketSoal.findOne({
-        attributes: {
-          exclude: ['id_paket'],
-        },
         include: [
           {
             model: models.KodeSeksi,
             as: 'kode_seksi',
-            attributes: ['nomor_kosek'],
+            attributes: ['id_kosek', 'nomor_kosek'],
             // get mata kuliah name from tb_kode_seksi
             include: [
               {
                 model: models.MataKuliah,
                 as: 'mata_kuliah',
-                attributes: ['nama_matkul'],
+                attributes: ['id_matkul', 'nama_matkul'],
               },
             ],
             include: [
               {
                 model: models.Semester,
                 as: 'semester',
-                attributes: ['semester'],
+                attributes: ['id_semester', 'semester'],
               },
             ],
             through: {
@@ -498,7 +480,7 @@ module.exports = {
             model: models.SoalPg,
             as: 'soal_pg',
             attributes: {
-              exclude: ['id_soal', 'id_dosen', 'id_matkul', 'id_semester'],
+              exclude: ['id_dosen', 'id_matkul', 'id_semester'],
             },
             through: {
               attributes: [],

@@ -3,11 +3,7 @@ const { models } = require('../models/index')
 module.exports = {
   get: async (req, res) => {
     try {
-      const data = await models.Semester.findAll({
-        attributes: {
-          exclude: ['id_semester'],
-        },
-      })
+      const data = await models.Semester.findAll()
       res.status(200).json({
         message: 'Data semester ditemukan',
         data: data,

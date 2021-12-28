@@ -18,14 +18,14 @@ module.exports = {
 
       const data = await models.User.findAll({
         attributes: {
-          exclude: ['id_user', 'password'],
+          exclude: ['password'],
         },
         include: [
           {
             model: models.Dosen,
             as: 'dosen',
             attributes: {
-              exclude: ['id_dosen', 'id_user'],
+              exclude: ['id_user'],
             },
             required: true,
           },
@@ -58,14 +58,14 @@ module.exports = {
 
       const data = await models.User.findAll({
         attributes: {
-          exclude: ['id_user', 'password'],
+          exclude: ['password'],
         },
         include: [
           {
             model: models.Mahasiswa,
             as: 'mahasiswa',
             attributes: {
-              exclude: ['id_mhs', 'id_user'],
+              exclude: ['id_user'],
             },
             required: true,
           },
@@ -98,14 +98,14 @@ module.exports = {
 
       const data = await models.User.findOne({
         attributes: {
-          exclude: ['id_user', 'password'],
+          exclude: ['password'],
         },
         include: [
           {
             model: models.Mahasiswa,
             as: 'mahasiswa',
             attributes: {
-              exclude: ['id_mhs', 'id_user'],
+              exclude: ['id_user'],
             },
             required: false,
           },
@@ -113,7 +113,7 @@ module.exports = {
             model: models.Dosen,
             as: 'dosen',
             attributes: {
-              exclude: ['id_dosen', 'id_user'],
+              exclude: ['id_user'],
             },
             required: false,
           },
@@ -227,9 +227,6 @@ module.exports = {
         const { keterangan } = req.body
 
         const getUser = await models.User.findOne({
-          attributes: {
-            exclude: ['id_user'],
-          },
           where: { id_user: id },
         })
 
@@ -285,9 +282,6 @@ module.exports = {
         )
 
         const data = await role.findOne({
-          attributes: {
-            exclude: ['id_user'],
-          },
           where: { id_user: id },
         })
 

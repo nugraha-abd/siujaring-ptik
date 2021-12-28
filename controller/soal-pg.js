@@ -14,7 +14,7 @@ module.exports = {
 
       const data = await models.SoalPg.findAll({
         attributes: {
-          exclude: ['id_soal', 'id_matkul', 'id_dosen', 'id_semester'],
+          exclude: ['id_matkul', 'id_dosen', 'id_semester'],
         },
         where: {
           id_dosen: req.user.dosen.id_dosen,
@@ -24,21 +24,21 @@ module.exports = {
             model: models.MataKuliah,
             as: 'mata_kuliah',
             attributes: {
-              exclude: ['id_matkul', 'created_at', 'updated_at'],
+              exclude: ['created_at', 'updated_at'],
             },
           },
           {
             model: models.Dosen,
             as: 'dosen',
             attributes: {
-              exclude: ['id_dosen', 'id_user', 'created_at', 'updated_at'],
+              exclude: ['id_user', 'created_at', 'updated_at'],
             },
           },
           {
             model: models.Semester,
             as: 'semester',
             attributes: {
-              exclude: ['id_semester', 'created_at', 'updated_at'],
+              exclude: ['created_at', 'updated_at'],
             },
           },
         ],
@@ -257,7 +257,7 @@ module.exports = {
 
       const data = await models.SoalPg.findOne({
         attributes: {
-          exclude: ['id_soal', 'id_dosen', 'id_matkul', 'id_semester'],
+          exclude: ['id_dosen', 'id_matkul', 'id_semester'],
         },
         where: {
           [Op.and]: [{ id_soal: id }, { id_dosen: req.user.dosen.id_dosen }],
@@ -267,21 +267,21 @@ module.exports = {
             model: models.MataKuliah,
             as: 'mata_kuliah',
             attributes: {
-              exclude: ['id_matkul', 'created_at', 'updated_at'],
+              exclude: ['created_at', 'updated_at'],
             },
           },
           {
             model: models.Dosen,
             as: 'dosen',
             attributes: {
-              exclude: ['id_dosen', 'id_user', 'created_at', 'updated_at'],
+              exclude: ['id_user', 'created_at', 'updated_at'],
             },
           },
           {
             model: models.Semester,
             as: 'semester',
             attributes: {
-              exclude: ['id_semester', 'created_at', 'updated_at'],
+              exclude: ['created_at', 'updated_at'],
             },
           },
         ],
