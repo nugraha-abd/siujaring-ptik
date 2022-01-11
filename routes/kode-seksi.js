@@ -12,6 +12,7 @@ router
 
 router
   .route('/:idKodeSeksi')
+  .get(kodeSeksiController.getById)
   .put(kodeSeksiController.put)
 
 // Import data mahasiswa ke dalam kode seksi

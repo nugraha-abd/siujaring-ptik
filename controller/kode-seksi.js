@@ -74,6 +74,82 @@ module.exports = {
       res.sendStatus(500)
     }
   },
+  getById: async (req, res) => {
+    try {
+      if (req.user.role !== 'admin' && req.user.role !== 'dosen')
+        return res.status(403).json({
+          message: 'Anda tidak memiliki akses',
+        })
+
+      const id = req.params.idKodeSeksi // id atau kode?
+
+      const data = await models.KodeSeksi.findOne({
+        where: { id_kosek: id },
+        attributes: {
+          exclude: [
+            'id_matkul',
+            'id_dosen1',
+            'id_dosen2',
+            'id_dosen3',
+            'id_semester',
+          ],
+        },
+        include: [
+          {
+            model: models.MataKuliah,
+            as: 'mata_kuliah',
+          },
+          {
+            model: models.Dosen,
+            as: 'dosen1',
+            attributes: {
+              exclude: ['id_user'],
+            },
+          },
+          {
+            model: models.Dosen,
+            as: 'dosen2',
+            attributes: {
+              exclude: ['id_user'],
+            },
+          },
+          {
+            model: models.Dosen,
+            as: 'dosen3',
+            attributes: {
+              exclude: ['id_user'],
+            },
+          },
+          {
+            model: models.Semester,
+            as: 'semester',
+          },
+          {
+            model: models.Mahasiswa,
+            as: 'mahasiswa',
+            attributes: ['id_mhs', 'nama_mhs', 'nim'],
+            through: {
+              attributes: [],
+            },
+          },
+        ],
+      })
+
+      if (data === null) {
+        return res
+          .status(404)
+          .json({ message: 'Data kode seksi tidak ditemukan' })
+      }
+
+      res.status(200).json({
+        message: 'Data kode seksi ditemukan',
+        data: data,
+      })
+    } catch (err) {
+      console.error(err.message)
+      res.sendStatus(500)
+    }
+  },
   post: async (req, res) => {
     try {
       if (req.user.role !== 'admin')
