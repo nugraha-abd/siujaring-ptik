@@ -138,7 +138,7 @@ module.exports = {
       if (data === null) {
         return res
           .status(404)
-          .json({ message: 'Data kode seksi tidak ditemukan' })
+          .json({ message: `Data kode seksi dengan id ${id} tidak ditemukan` })
       }
 
       res.status(200).json({
