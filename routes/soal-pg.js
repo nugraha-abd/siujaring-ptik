@@ -22,6 +22,7 @@ router
 
 router
   .route('/:idSoal')
+  .get(soalPgController.getById)
   .put(
     upload.fields([
       { name: 'gambar_soal', maxCount: 1 }, 

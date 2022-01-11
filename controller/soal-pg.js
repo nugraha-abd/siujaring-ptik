@@ -57,6 +57,69 @@ module.exports = {
       res.sendStatus(500)
     }
   },
+  getById: async (req, res) => {
+    try {
+      if (req.user.role !== 'dosen')
+        return res.status(403).json({
+          message: 'Anda bukan dosen',
+        })
+
+      const id = req.params.idSoal
+
+      const data = await models.SoalPg.findOne({
+        attributes: {
+          exclude: ['id_matkul', 'id_dosen', 'id_semester'],
+        },
+        where: {
+          id_soal: id,
+        },
+        include: [
+          {
+            model: models.MataKuliah,
+            as: 'mata_kuliah',
+            attributes: {
+              exclude: ['created_at', 'updated_at'],
+            },
+          },
+          {
+            model: models.Dosen,
+            as: 'dosen',
+            attributes: {
+              exclude: ['id_user', 'created_at', 'updated_at'],
+            },
+          },
+          {
+            model: models.Semester,
+            as: 'semester',
+            attributes: {
+              exclude: ['created_at', 'updated_at'],
+            },
+          },
+        ],
+      })
+
+      if (data === null) {
+        return res
+          .status(404)
+          .json({ message: `Data soal dengan id ${id} tidak ditemukan` })
+      }
+
+      // check if id_dosen data in table soal equal to logged id_dosen account
+      if (data.dosen.id_dosen !== req.user.dosen.id_dosen) {
+        return res.status(403).json({
+          message: `Anda bukan pembuat soal dengan id ${id}`,
+        })
+      }
+
+      res.status(200).json({
+        message: 'Data soal ditemukan',
+        data: data,
+      })
+    } catch (err) {
+      console.error(err.message)
+      res.sendStatus(500)
+    }
+  },
   post: async (req, res) => {
     try {
       // Filter image
