@@ -1,0 +1,14 @@
+=> Import Mahasiswa
+"role","password","keterangan","email","nama_mhs","nim","no_telpon"
+
+=> Import Dosen
+"role","password","keterangan","email","nama_dosen","nip","nidk","nidn","no_telpon"
+
+=> Import Mata Kuliah
+"kode_matkul", "nama_matkul", "sks"
+
+=> Import Kode Seksi
+"nama_matkul","nip_dosen1","nip_dosen2","nip_dosen3","semester","nomor_kosek"
+
+=> Import Mahasiswa ke dalam Kode Seksi
+"nomor_kosek", "nim"   
