@@ -38,6 +38,6 @@ RESTFul API untuk Aplikasi Ujian Pilihan Ganda Daring menggunakan tools sebagai 
 
 Jika ingin menambahkan data dummy ganti command pada langkah no 6 menjadi `npx sequelize-cli db:seed:all`
 
-## Dokumentasi Pengujian Endpoint
+## Dokumentasi Pengujian Endpoint:
 
 https://documenter.getpostman.com/view/15098624/UVXokDat
